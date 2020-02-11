@@ -1,3 +1,4 @@
+//The HX711 library is available here: https://github.com/bogde/HX711
 #include "HX711.h"
 
 #define DOUT  3
