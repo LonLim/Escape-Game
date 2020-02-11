@@ -1,5 +1,3 @@
-//The HX711 library is available here: https://github.com/bogde/HX711
-
 #define DETECT 2 // pin 2 for  sensor
 #define ACTION 8 // pin 8 for action to do someting
 
