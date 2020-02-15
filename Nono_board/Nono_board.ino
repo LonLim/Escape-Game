@@ -34,22 +34,22 @@ void loop() {
   if (analog_y > 600)
   {
     index += 1;
-    index = check_border(index);
+    index = check_row_border(index);
   }
   if (analog_y < 450)
   {
     index -= 1;
-    index = check_border(index);
+    index = check_row_border(index);
   }
   if (analog_x > 600)
   {
     index += 8;
-    index = check_border(index);
+    index = check_column_border(index);
   }
   if (analog_x < 450)
   {
     index -=8;
-    index = check_border(index);
+    index = check_column_border(index);
   }
 
   if (analog_button == 1)
@@ -59,7 +59,7 @@ void loop() {
   }
 }
 
-int check_border(int index) {
+int check_row_border(int index) {
   if ((index + 1) % 8 == 0)
   {
     index +=8;
@@ -68,7 +68,11 @@ int check_border(int index) {
   {
     index -=8;
   }
-  if (index < 0)
+  return index;
+}
+
+int check_column_border(int index) {
+    if (index < 0)
   {
     index +=64;
   }
