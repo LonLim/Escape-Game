@@ -71,7 +71,7 @@ void updateLocation (int playerPosition)  { // Update the location of the pixel
   //memset(location,0,sizeof(location));
   //easiest way to reset all array to zero
   initLocation(playerPosition);
-  if (location[playerPosition] != 2) 
+  if (location[playerPosition] == 0) 
   {
     location[playerPosition] = 1;
   }
@@ -121,11 +121,11 @@ int checkTopBountary(int playerPosition) { // check if position has moved out of
 void initLocation(int playerPosition) { // init all pixel and change to its relevant number accordingly
    for (int position = 0; position < 64; position++)
    {
-      if(location[position] != 2)
+      if(location[position] == 1)
       {
         location[position] = 0;
       }
-      if(location[position] == 2 || location[position] == 3)
+      if(location[position] > 2)
       {
         location[position] = 2;
       }
