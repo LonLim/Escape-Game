@@ -1,11 +1,15 @@
+// reference for neopixel: https://create.arduino.cc/projecthub/glowascii/neopixel-leds-arduino-basics-126d1a
+#include <Adafruit_NeoPixel.h>
 int playerPosition = 0;
-
 int location[64];
 
 //Pins & Variables for analog joystick
 #define analog_x A0
 #define analog_y A1
 #define analog_button 52
+#define NEOPIXEL1 2
+#define NUMPIXELS 64
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIXEL1, NEO_GRB + NEO_KHZ800);
 int x_value = 0;
 int y_value = 0;
 int swtich = 0;
@@ -73,9 +77,9 @@ void updateLocation (int playerPosition)  { // Update the location of the pixel
   }
   for (int row = 0; row < 8; row++)
   {
-    for (int col = 0; col < 8; col++) 
+    for (int col = 0; col < 8; col++)
       {
-        Serial.print(location[j+8*i]);
+        Serial.print(location[row+8*col]);
         Serial.print("  ");
       }
     Serial.println("");
@@ -83,6 +87,7 @@ void updateLocation (int playerPosition)  { // Update the location of the pixel
   Serial.println("----------------------------------------------");
   Serial.println(playerPosition);
   delay(500);
+  setLEDColor();
 }
 
 int checkSideBountary(int playerPosition) { // check if position has moved out of side boundary
@@ -126,7 +131,26 @@ void initLocation(int playerPosition) { // init all pixel and change to its rele
       }
       if(location[position] == 2 && position == playerPosition)
       {
-        location[position = 3;
+        location[position] = 3;
       }
    }
+}
+void setLEDColor()  {    
+   for(int position = 0; position<64; position++){ //update location to the pixel
+      switch (location[position]){
+        case 1:
+          pixels.setPixelColor(position, pixels.Color(150,0,0)); // Moderately bright red color.
+          break;
+        case 2:
+          pixels.setPixelColor(position, pixels.Color(0,150,0)); // Moderately bright green color.
+          break;
+        case 3:
+          pixels.setPixelColor(position, pixels.Color(0,0,150)); // Moderately bright blue color.
+          break;
+        default:
+          pixels.setPixelColor(position, pixels.Color(0,0,0)); // Off the pixel
+       break;
+    }
+    pixels.show();
+  }
 }
