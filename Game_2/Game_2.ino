@@ -110,7 +110,7 @@ void loop() {
   incorrect = 0;
   incorrect = light_up_maze(position);
   pixels.show();
-  if (incorrect == 40)
+  if (incorrect == 40) //(zhi sheng to change to maximum number of step required for index)
   {
     reset_maze();
   }
@@ -121,31 +121,31 @@ int check_button_push(int input) {
   {
     return 0;
   }
-  else if (500 < input < 600)
+  else if ((500 < input) && (input > 600))
   {
     return 1;
   }
-  else if (300 < input < 400)
+  else if ((300 < input) && (input < 400))
   {
     return 2;
   }
-  else if (230 < input < 260)
+  else if ((230 < input) && (input < 260))
   {
     return 3;
   }
-  else if (190 < input < 210)
+  else if ((190 < input) && (input < 210))
   {
     return 4;
   }
-  else if (155 < input < 180)
+  else if ((155 < input) && (input < 180))
   {
     return 5;
   }
-  else if (135 < input < 150)
+  else if ((135 < input) && (input < 150))
   {
     return 6;
   }
-  else if (110 < input < 130)
+  else if ((110 < input) && (input < 130))
   {
     return 7;
   }
@@ -177,6 +177,7 @@ void reset_maze() {
   {
     pixels.setPixelColor(position, pixels.Color(0,0,0)); // Clear maze
   }
+  pixels.show();
   digitalWrite(reset, HIGH);
   maze_answer_row = maze_answer_row + 1;
 }
