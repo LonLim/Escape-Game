@@ -1,4 +1,3 @@
-<<<<<<< HEAD:nonogram/nonogram.ino
 // reference for neopixel: https://create.arduino.cc/projecthub/glowascii/neopixel-leds-arduino-basics-126d1a
 #include <Adafruit_NeoPixel.h>
 int playerPosition = 0;
