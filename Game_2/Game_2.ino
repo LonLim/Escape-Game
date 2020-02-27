@@ -13,10 +13,10 @@
 #define NUMPIXELS 64
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIXELS, NEO_GRB + NEO_KHZ800);
 
-int maze_array[3][3] = { // (Zhi Sheng to fill upanswer position)
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
+int maze_array[3][31] = { // (Zhi Sheng to fill upanswer position)
+  {39, 38, 30, 22, 14, 13, 12, 20, 28, 36, 44, 45, 53, 61, 60, 59, 58, 50, 49, 41, 33, 34, 26, 18, 10, 2, 1, 0, -1, -1, -1},
+  {63, 62, 61, 60, 59, 51, 43, 44, 45, 46, 38, 30, 29, 21, 13, 12, 4, 3, 2, 10, 18, 26, 34, 33, 41, 40, -1, -1, -1, -1, -1},
+  {7, 6, 5, 4, 3, 2, 1, 9, 17, 25, 26, 34, 35, 36, 28, 20, 21, 22, 30, 38, 46, 45, 53, 52, 60, 59, 58, 50, 49, 41, 40},
 };
 
 #define reset 1
@@ -110,7 +110,7 @@ void loop() {
   incorrect = 0;
   incorrect = light_up_maze(position);
   pixels.show();
-  if (incorrect == 40) //(zhi sheng to change to maximum number of step required for index)
+  if (incorrect == 31)
   {
     reset_maze();
   }
@@ -155,10 +155,10 @@ int check_button_push(int input) {
   }
 }
 
-int light_up_maze(int position) { //(zhi sheng to change to maximum number of step required for index in for loop)
-  for ( int index = 0; index < 40; index++)
+int light_up_maze() { //(zhi sheng to change to maximum number of step required for index in for loop)
+  for ( int index = 0; index < 31; index++)
   {
-    if (position == index)
+    if (position == maze_array[maze_answer_row][index])
     {
       pixels.setPixelColor(position, pixels.Color(0,150,0)); // Moderately bright green color.
       break;
