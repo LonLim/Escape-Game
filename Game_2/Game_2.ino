@@ -23,6 +23,8 @@ int maze_array[3][31] = { // (Zhi Sheng to fill upanswer position)
 
 int position = 0;
 int incorrect = 0;
+int correct = 0;
+int current_pos = 0;
 
 int column1Input = 0;
 int column2Input = 0;
@@ -108,11 +110,15 @@ void loop() {
     position = 56 + position;
   }
   incorrect = 0;
-  incorrect = light_up_maze(position);
+  incorrect, correct = light_up_maze();
   pixels.show();
   if (incorrect == 31)
   {
     reset_maze();
+  }
+  else
+  {
+    check_maze();
   }
 }
 
@@ -155,21 +161,53 @@ int check_button_push(int input) {
   }
 }
 
-int light_up_maze() { //(zhi sheng to change to maximum number of step required for index in for loop)
-  for ( int index = 0; index < 31; index++)
-  {
-    if (position == maze_array[maze_answer_row][index])
+int light_up_maze() {
+  if (position == maze_array[maze_answer_row][current_pos])
     {
       pixels.setPixelColor(position, pixels.Color(0,150,0)); // Moderately bright green color.
-      break;
+      correct  = correct + 1;
+      current_pos = current_pos + 1;
+      return incorrect, correct;
     }
-    else
+  else
     {
       pixels.setPixelColor(position, pixels.Color(150,0,0)); // Moderately bright red color.
       incorrect = incorrect + 1;
     }
+  return incorrect, correct;
+}
+
+void check_maze() {
+  switch (maze_answer_row)
+  {
+    case 0: 
+    while (correct == 28)
+    {
+      for (int index = 0; index < 64; index++)
+      {
+        pixels.setPixelColor(position, pixels.Color(0,150,0)); // Clear maze
+      }
+      pixels.show();
+    }
+    case 1:
+    while (correct == 26)
+    {
+      for (int index = 0; index < 64; index++)
+      {
+        pixels.setPixelColor(position, pixels.Color(0,150,0)); // Clear maze
+      }
+      pixels.show();
+    }
+    case 2: 
+    while (correct == 31)
+    {
+      for (int index = 0; index < 64; index++)
+      {
+        pixels.setPixelColor(position, pixels.Color(0,150,0)); // Clear maze
+      }
+      pixels.show();
+    }
   }
-  return incorrect;
 }
 
 void reset_maze() {
@@ -179,5 +217,12 @@ void reset_maze() {
   }
   pixels.show();
   digitalWrite(reset, HIGH);
+  correct = 0;
+  incorrect = 0;
+  current_pos = 0;
   maze_answer_row = maze_answer_row + 1;
+  if (maze_answer_row == 3)
+  {
+    maze_answer_row = 0;
+  }
 }
