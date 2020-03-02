@@ -79,35 +79,35 @@ void loop() {
 
     if ( column1_index != 8)
   {
-    position = position;
+    position = column1_index;
   }
   if ( column2_index != 8)
   {
-    position = 8 + position;
+    position = 8 + column2_index;
   }
   if ( column3_index != 8)
   {
-    position = 16 + position;
+    position = 16 + column3_index;
   }
   if ( column4_index != 8)
   {
-    position = 24 + position;
+    position = 24 + column4_index;
   }
   if ( column5_index != 8)
   {
-    position = 32 + position;
+    position = 32 + column5_index;
   }
   if ( column6_index != 8)
   {
-    position = 40 + position;
+    position = 40 + column6_index;
   }
   if ( column7_index != 8)
   {
-    position = 48 + position;
+    position = 48 + column7_index;
   }
   if ( column8_index != 8)
   {
-    position = 56 + position;
+    position = 56 + column8_index;
   }
   incorrect = 0;
   incorrect, correct = light_up_maze();
@@ -127,7 +127,7 @@ int check_button_push(int input) {
   {
     return 0;
   }
-  else if ((500 < input) && (input > 600))
+  else if ((500 < input) && (input < 600))
   {
     return 1;
   }
