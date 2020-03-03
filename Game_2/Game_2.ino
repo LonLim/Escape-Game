@@ -13,7 +13,7 @@
 #define NUMPIXELS 64
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIXELS, NEO_GRB + NEO_KHZ800);
 
-int maze_array[3][31] = { // (Zhi Sheng to fill upanswer position)
+int maze_array[3][31] = {
   {39, 38, 30, 22, 14, 13, 12, 20, 28, 36, 44, 45, 53, 61, 60, 59, 58, 50, 49, 41, 33, 34, 26, 18, 10, 2, 1, 0, -1, -1, -1},
   {63, 62, 61, 60, 59, 51, 43, 44, 45, 46, 38, 30, 29, 21, 13, 12, 4, 3, 2, 10, 18, 26, 34, 33, 41, 40, -1, -1, -1, -1, -1},
   {7, 6, 5, 4, 3, 2, 1, 9, 17, 25, 26, 34, 35, 36, 28, 20, 21, 22, 30, 38, 46, 45, 53, 52, 60, 59, 58, 50, 49, 41, 40},
@@ -22,8 +22,8 @@ int maze_array[3][31] = { // (Zhi Sheng to fill upanswer position)
 #define reset 1
 
 int position = 0;
-int incorrect = 0;
-int correct = 0;
+int old_correct = 0;
+int new_correct = 0;
 int current_pos = 0;
 
 int column1Input = 0;
@@ -77,7 +77,7 @@ void loop() {
   column7_index = check_button_push(column7Input);
   column8_index = check_button_push(column8Input);
 
-    if ( column1_index != 8)
+  if ( column1_index != 8)
   {
     position = column1_index;
   }
@@ -109,10 +109,9 @@ void loop() {
   {
     position = 56 + column8_index;
   }
-  incorrect = 0;
-  incorrect, correct = light_up_maze();
+  new_correct = light_up_maze();
   pixels.show();
-  if (incorrect == 31)
+  if (new_correct < old_correct)
   {
     reset_maze();
   }
@@ -167,14 +166,13 @@ int light_up_maze() {
       pixels.setPixelColor(position, pixels.Color(0,150,0)); // Moderately bright green color.
       correct  = correct + 1;
       current_pos = current_pos + 1;
-      return incorrect, correct;
     }
   else
     {
       pixels.setPixelColor(position, pixels.Color(150,0,0)); // Moderately bright red color.
-      incorrect = incorrect + 1;
+      correct = correct - 1;
     }
-  return incorrect, correct;
+  return correct;
 }
 
 void check_maze() {
@@ -185,7 +183,7 @@ void check_maze() {
     {
       for (int index = 0; index < 64; index++)
       {
-        pixels.setPixelColor(position, pixels.Color(0,150,0)); // Clear maze
+        pixels.setPixelColor(position, pixels.Color(0,150,0)); // STAY GREEN THROUGHOUT
       }
       pixels.show();
     }
@@ -194,7 +192,7 @@ void check_maze() {
     {
       for (int index = 0; index < 64; index++)
       {
-        pixels.setPixelColor(position, pixels.Color(0,150,0)); // Clear maze
+        pixels.setPixelColor(position, pixels.Color(0,150,0)); // STAY GREEN THROUGHOUT
       }
       pixels.show();
     }
@@ -203,7 +201,7 @@ void check_maze() {
     {
       for (int index = 0; index < 64; index++)
       {
-        pixels.setPixelColor(position, pixels.Color(0,150,0)); // Clear maze
+        pixels.setPixelColor(position, pixels.Color(0,150,0)); // STAY GREEN THROUGHOUT
       }
       pixels.show();
     }
@@ -217,8 +215,8 @@ void reset_maze() {
   }
   pixels.show();
   digitalWrite(reset, HIGH);
-  correct = 0;
-  incorrect = 0;
+  olc_correct = 0;
+  new_correct = 0;
   current_pos = 0;
   maze_answer_row = maze_answer_row + 1;
   if (maze_answer_row == 3)
