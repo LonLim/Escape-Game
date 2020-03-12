@@ -6,11 +6,11 @@ int location[64];
 //Pins & Variables for analog joystick
 #define analog_x A0
 #define analog_y A1
-#define analog_button 52
+#define analog_button 11
 
 
 //Reset pin
-#define reset 3
+#define reset 12
 
 //Define neopixel pin and number
 #define NEOPIXEL1 2
@@ -32,7 +32,8 @@ int clue_array[3][28] = {
 
 //Define for all Display
 #include <TM1637Display.h> 
-#define CLK 14
+#define CLK 10
+#define DIO0 0
 #define DIO1 1
 #define DIO2 2
 #define DIO3 3
@@ -42,22 +43,25 @@ int clue_array[3][28] = {
 #define DIO7 7
 #define DIO8 8
 #define DIO9 9
-#define DIO10 10
-#define DIO11 11
-#define DIO12 12
-
-TM1637Display display1(9, 1); 
-TM1637Display display2(9, 2); 
-TM1637Display display3(9, 3);
-TM1637Display display4(9, 4);
-TM1637Display display5(9, 5); 
-TM1637Display display6(9, 6); 
-TM1637Display display7(9, 7);
-TM1637Display display8(9, 8); 
-TM1637Display display9(9, 9); 
-TM1637Display display10(9, 10); 
-TM1637Display display11(9, 11);
-TM1637Display display12(9, 12);
+#define AIO2 A2
+#define AIO3 A3
+#define AIO4 A4
+#define AIO5 A5
+ 
+TM1637Display display1(CLK, DIO0); 
+TM1637Display display2(CLK, DIO1); 
+TM1637Display display3(CLK, DIO2);
+TM1637Display display4(CLK, DIO3);
+TM1637Display display5(CLK, DIO4); 
+TM1637Display display6(CLK, DIO5); 
+TM1637Display display7(CLK, DIO6);
+TM1637Display display8(CLK, DIO7); 
+TM1637Display display9(CLK, DIO8); 
+TM1637Display display10(CLK, DIO9); 
+TM1637Display display11(CLK, AIO2);
+TM1637Display display12(CLK, AI03);
+TM1637Display display13(CLK, AI04);
+TM1637Display display14(CLK, AI05);
 
 uint8_t data[] = { 0x0, 0x0, 0x0, 0x0 };  // all segments clear
 
@@ -83,7 +87,8 @@ void setup() {
   display10.setBrightness(0x0f);
   display11.setBrightness(0x0f);  
   display12.setBrightness(0x0f); 
- 
+  display13.setBrightness(0x0f);
+  display14.setBrightness(0x0f); 
   //Fill all display with empty data
   display1.setSegments(data);
   display2.setSegments(data);  
@@ -97,6 +102,8 @@ void setup() {
   display10.setSegments(data);  
   display11.setSegments(data);
   display12.setSegments(data);
+  display13.setSegments(data);
+  display14.setSegments(data);
 }
 
 void loop() {
@@ -282,4 +289,10 @@ void displayClue() {
 
   display12.setSegments(data);// fill(clear) display with data[] clue_array
   display12.showNumberDec(clue_array[clue_row][22], 0, clue_array[clue_row][23]);// display 12
+  
+  display13.setSegments(data);// fill(clear) display with data[] clue_array
+  display13.showNumberDec(clue_array[clue_row][24], 0, clue_array[clue_row][25]);// display 13
+  
+  display14.setSegments(data);// fill(clear) display with data[] clue_array
+  display14.showNumberDec(clue_array[clue_row][26], 0, clue_array[clue_row][27]);// display 14
 }
