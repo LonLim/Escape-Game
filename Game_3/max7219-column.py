@@ -15,9 +15,9 @@ while True:
     if(c.isdigit()):
         bytes = "{0:b}".format(int(c))
         print(bytes)
-    for index, item in enumerate(bytes):
+    for idx, item in enumerate(bytes):
         with canvas(device) as draw:
             if(item !="0"):
-                print(index)
-                draw.line((index, 0, index, device.height), fill="white")
-                draw.line((index+1, 0, index+1, device.height), fill="white")
+                print(idx)
+                draw.line((idx, 0, idx, device.height), fill="white")
+                draw.line((idx+1, 0, idx+1, device.height), fill="white")
