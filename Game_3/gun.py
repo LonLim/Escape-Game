@@ -48,21 +48,22 @@ while True:
 
 	# loop over the detected barcodes
 	for barcode in barcodes:
+
 		# the barcode data is a bytes object so if we want to draw it
 		# on our output image we need to convert it to a string first
 		barcodeData = barcode.data.decode("utf-8")
 		barcodeType = barcode.type
 		text = "{} ({})".format(barcodeData, barcodeType)
 		text= text[0]
-    		if(text.isdigit()):
-        		bytes = "{0:04b}".format(int(c))
-        		print(bytes)
-    		with canvas(device) as draw:
-        		for index,item in enumerate(bytes):
-                		if(item !="0"):
-                    			print(index)
-                    			draw.line((2*index, 0, 2*index, device.height), fill="white")
-                    			draw.line((2*index+1, 0, 2*index+1, device.height), fill="white")
+      if(text.isdigit()):
+      	bytes = "{0:04b}".format(int(c))
+       	print(bytes)
+    	with canvas(device) as draw:
+      	for index,item in enumerate(bytes):
+       		if(item !="0"):
+        		print(index)
+         			draw.line((2*index, 0, 2*index, device.height), fill="white")
+         			draw.line((2*index+1, 0, 2*index+1, device.height), fill="white")
 	
 
 # close the output CSV file do a bit of cleanup
