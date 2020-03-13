@@ -11,4 +11,4 @@ while True:
     
  with canvas(device) as draw:
     draw.line((0, 0, 0, device.height), fill="white")
-    draw.line((0, 3, 0, device.height), fill="white")
+    draw.line((2, 0, 2, device.height), fill="white")
