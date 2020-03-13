@@ -3,7 +3,7 @@
 import spi
 
 ### Initialize an SPI connection using BCM-mode pins 21, 20, and 16
-max7219 = spi.SPI(clk=21, cs=20, mosi=16, miso=None, verbose=True)
+max7219 = spi.SPI(clk=23, cs=24, mosi=19, miso=None, verbose=True)
 
 ### Zero out all registers
 for cmd in range(16):
