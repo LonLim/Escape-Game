@@ -17,7 +17,8 @@ while True:
         print(bytes)
     with canvas(device) as draw:
         for index,item in enumerate(bytes):
-            draw.line((index, 0, index, device.height*int(bytes[index])), fill="white")
-            draw.line((index+1, 0, index+1, device.height*int(bytes[index])), fill="white")
+                if(item !="0"):
+                    draw.line((index, 0, index, device.height), fill="white")
+                    draw.line((index+1, 0, index+1, device.height), fill="white")
            
              
