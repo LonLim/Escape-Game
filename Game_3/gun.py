@@ -51,11 +51,11 @@ while True:
 		if(text.isdigit()):
         		bytes = "{0:04b}".format(int(c))
         		print(bytes)
-   		with canvas(device) as draw:
-        		for index,item in enumerate(bytes):
-                		if(item !="0"):
-                    			draw.line((2*index, 0, 2*index, device.height), fill="white")
-                    			draw.line((2*index+1, 0, 2*index+1, device.height), fill="white")	
+			with canvas(device) as draw:
+        			for index,item in enumerate(bytes):
+                			if(item !="0"):
+                    				draw.line((2*index, 0, 2*index, device.height), fill="white")
+                    				draw.line((2*index+1, 0, 2*index+1, device.height), fill="white")	
 
 # close the output CSV file do a bit of cleanup
 print("[INFO] cleaning up...")
