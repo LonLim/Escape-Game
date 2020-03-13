@@ -48,7 +48,6 @@ while True:
 
 	# loop over the detected barcodes
 	for barcode in barcodes:
-
 		# the barcode data is a bytes object so if we want to draw it
 		# on our output image we need to convert it to a string first
 		barcodeData = barcode.data.decode("utf-8")
