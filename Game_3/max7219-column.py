@@ -19,15 +19,3 @@ while True:
             if(item !=0):
                 draw.line((index, 0, index, device.height), fill="white")
                 draw.line((index+1, 0, index+1, device.height), fill="white")
-            
-    
-    
- '''
-    if(c=="9"):
-        with canvas(device) as draw:
-            draw.line((0, 0, 0, device.height), fill="white")
-            draw.line((1, 0, 1, device.height), fill="white")
-            draw.line((6, 0, 6, device.height), fill="white")
-            draw.line((7, 0, 7, device.height), fill="white")
-    elif(c=="8"):
- '''       
