@@ -15,7 +15,7 @@ while True:
     if(c.isdigit()):
         num = int(c)
         bytes = "{0:b}".format(int(c))
-
+        print(bytes)
     for index, item in enumerate(bytes):
         with canvas(device) as draw:
             if(item !=0):
