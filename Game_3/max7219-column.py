@@ -13,11 +13,10 @@ str = ""
 while True:
     c = sys.stdin.read(1) # reads one byte at a time, similar to getchar()
     if(c.isdigit()):
-        num = int(c)
         bytes = "{0:b}".format(int(c))
         print(bytes)
     for index, item in enumerate(bytes):
         with canvas(device) as draw:
-            if(item !=0):
+            if(item !="0"):
                 draw.line((index, 0, index, device.height), fill="white")
                 draw.line((index+1, 0, index+1, device.height), fill="white")
