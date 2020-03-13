@@ -1,14 +1,14 @@
-from luma.core.legacy import text
-from luma.core.legacy.font import proportional, CP437_FONT, LCD_FONT
-from luma.core.interface.serial import spi, noop
-from luma.core.render import canvas
-from luma.led_matrix.device import max7219
 import time
 
-serial = spi(port=0, device=0, gpio=noop())
-device = max7219(serial)
+from luma.led_matrix.device import unicornhathd
+from luma.core.interface.serial import spi, noop
+from luma.core.render import canvas
 
-while True:
-    with canvas(device) as draw:
-        text(draw, (0, 0), "l", fill="white")
-time.sleep(0.1)
+serial = spi(port=0, device=0, gpio=noop())
+device = unicornhathd(serial)
+
+for y in range(device.height):
+    for x in range(device.width):
+        with canvas(device) as draw:
+            draw.point((x, y), fill="white")
+        time.sleep(0.5)
