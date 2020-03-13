@@ -12,7 +12,7 @@ device = max7219(serial,rotate=2)
 str = ""
 while True:
     c = sys.stdin.read(1) # reads one byte at a time, similar to getchar()
-    print(c)
+    print(int(c))
     bytes = bin(int(c[0:-2]))
     
     for index, item in enumerate(bytes):
