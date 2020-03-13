@@ -12,11 +12,10 @@ device = max7219(serial,rotate=2)
 str = ""
 while True:
     c = sys.stdin.read(1) # reads one byte at a time, similar to getchar()
-    try:
+    if(is_int(c)):
         num = int(c)
         bytes = "{0:b}".format(int(c))
-    catch:
-        continue
+
     for index, item in enumerate(bytes):
         with canvas(device) as draw:
             if(item !=0):
