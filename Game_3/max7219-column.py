@@ -13,7 +13,8 @@ len = 0
 while True:
     c = sys.stdin.read(1) # reads one byte at a time, similar to getchar()
     if(c.isdigit()):
-        bytes = "{0:b}".format(int(c))
+        bytes = "{0:04b}".format(int(c))
+        if len(bytes)
         print(bytes)
     with canvas(device) as draw:
         for index,item in enumerate(bytes):
