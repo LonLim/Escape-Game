@@ -20,7 +20,7 @@ def demo(n, block_orientation, rotate):
     for y in range(8):
         for x in range(8):
             with canvas(device) as draw:
-                draw.point((x,y), fill="green")
+                draw.point((x,y), fill="red")
             time.sleep(0.5)
 
 if __name__ == "__main__":
