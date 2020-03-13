@@ -18,6 +18,6 @@ while True:
     for idx, item in enumerate(bytes):
         with canvas(device) as draw:
             if(item !="0"):
-                print(idx)
                 draw.line((idx, 0, idx, device.height), fill="white")
                 draw.line((idx+1, 0, idx+1, device.height), fill="white")
+                time.sleep(0.3)
