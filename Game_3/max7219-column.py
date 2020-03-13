@@ -16,7 +16,7 @@ while True:
         bytes = "{0:b}".format(int(c))
         print(bytes)
     with canvas(device) as draw:
-        for index,item in enumerate(btyes)
+        for index,item in enumerate(bytes)
             draw.line((index, 0, index, device.height*btyes[index]), fill="white")
             draw.line((index+1, 0, index+1, device.height*bytes[index]), fill="white")
            
