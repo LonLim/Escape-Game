@@ -30,10 +30,12 @@ found = set()
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it to
+	# change frame to grayscale
 	# have a maximum width of 400 pixels
 	frame = vs.read()
+	frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	frame = imutils.resize(frame, width=400,inter= cv2.INTER_CUBIC)
-
+	
 	# find the barcodes in the frame and decode each of the barcodes
 	barcodes = pyzbar.decode(frame)
 
