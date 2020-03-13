@@ -4,9 +4,9 @@ import busio
 import digitalio
 import time
 
-clk = RX
-din = TX
-cs = digitalio.DigitalInOut(A2)
+clk = 23
+din = 19
+cs = digitalio.DigitalInOut(24)
 
 spi = busio.SPI(clk, MOSI=din)
 display = matrices.Matrix8x8(spi, cs)
