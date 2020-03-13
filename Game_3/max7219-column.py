@@ -8,7 +8,7 @@ import time
 serial = spi(port=0, device=0, gpio=noop())
 device = max7219(serial)
 
-while true:
+while True:
     with canvas(device) as draw:
         text(draw, (0, 0), "1", fill="white", font=proportional(CP437_FONT))
 time.sleep(0.1)
