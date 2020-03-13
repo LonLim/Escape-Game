@@ -9,17 +9,15 @@ device = max7219(serial,rotate=2)
 
 
 
-str = ""
+len = 0
 while True:
     c = sys.stdin.read(1) # reads one byte at a time, similar to getchar()
     if(c.isdigit()):
         bytes = "{0:b}".format(int(c))
         print(bytes)
-    for idx, item in enumerate(bytes):
-        with canvas(device) as draw:
-            if(item !="0"):
-                print(idx)
-                print(item)
-                draw.line((idx, 0, idx, device.height), fill="white")
-                draw.line((idx+1, 0, idx+1, device.height), fill="white")
-                time.sleep(0.3)
+    with canvas(device) as draw:
+        for index,item in enumerate(btyes)
+            draw.line((index, 0, index, device.height*btyes[index]), fill="white")
+            draw.line((index+1, 0, index+1, device.height*bytes[index]), fill="white")
+           
+             
