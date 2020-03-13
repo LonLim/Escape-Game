@@ -55,13 +55,13 @@ while True:
 		barcodeType = barcode.type
 		text = "{} ({})".format(barcodeData, barcodeType)
 		text= text[0]
-      	if(text.isdigit()):
-      		bytes = "{0:04b}".format(int(c))
-       		print(bytes)
+      if(text.isdigit()):
+      	bytes = "{0:04b}".format(int(c))
+       	print(bytes)
     	with canvas(device) as draw:
-      		for index,item in enumerate(bytes):
-       			if(item !="0"):
-        			print(index)
+      	for index,item in enumerate(bytes):
+       		if(item !="0"):
+        		print(index)
          			draw.line((2*index, 0, 2*index, device.height), fill="white")
          			draw.line((2*index+1, 0, 2*index+1, device.height), fill="white")
 	
