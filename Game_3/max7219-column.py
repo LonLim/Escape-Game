@@ -19,6 +19,5 @@ while True:
         with canvas(device) as draw:
             if(item !="0"):
                 print(index)
-                print(item.type)
                 draw.line((index, 0, index, device.height), fill="white")
                 draw.line((index+1, 0, index+1, device.height), fill="white")
