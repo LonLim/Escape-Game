@@ -1,4 +1,4 @@
-import max7219.led as led
+import luma.led as led
 
 matrix = led.matrix()
 
