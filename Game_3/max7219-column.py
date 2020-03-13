@@ -4,7 +4,7 @@ from luma.led_matrix.device import max7219
 import time
 
 serial = spi(port=0, device=0, gpio=noop())
-device = max7219(serial)
+device = max7219(serial,rotate=2)
 
 
 while True:
