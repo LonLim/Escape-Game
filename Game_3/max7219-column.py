@@ -10,5 +10,5 @@ device = max7219(serial)
 
 while True:
     with canvas(device) as draw:
-        text(draw, (0, 0), "l", fill="white", font=proportional(CP437_FONT))
+        text(draw, (0, 0), "l", fill="white")
 time.sleep(0.1)
