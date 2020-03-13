@@ -10,4 +10,4 @@ device = max7219(serial)
 while True:
     
  with canvas(device) as draw:
-    draw.line((0, 0, 0, device.height), fill="while")
+    draw.line((0, 0, 0, device.height), fill="white")
