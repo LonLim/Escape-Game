@@ -26,7 +26,7 @@ time.sleep(2.0)
 # barcodes found thus far
 csv = open(args["output"], "w")
 found = set()
-
+text = ""
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it to
