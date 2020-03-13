@@ -48,9 +48,9 @@ while True:
 		barcodeType = barcode.type
 		text = "{} ({})".format(barcodeData, barcodeType)
 		text= text[0]
-	    if(text.isdigit()):
-        	bytes = "{0:04b}".format(int(c))
-        	print(bytes)
+		if(text.isdigit()):
+        		bytes = "{0:04b}".format(int(c))
+        		print(bytes)
    		with canvas(device) as draw:
         		for index,item in enumerate(bytes):
                 		if(item !="0"):
