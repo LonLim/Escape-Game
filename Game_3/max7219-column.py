@@ -17,10 +17,10 @@ def demo(n, block_orientation, rotate):
     device = max7219(serial, cascaded=n or 1,  block_orientation=block_orientation, rotate=rotate or 0)
     print("Created device")
 
-    for y in range(8):
-        for x in range(8):
+    for y in range(0,8):
+        for x in range(0,8):
             with canvas(device) as draw:
-                draw.point((x,y))
+                draw.point((x,y), fill="white")
             time.sleep(0.5)
 
 if __name__ == "__main__":
