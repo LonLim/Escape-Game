@@ -13,7 +13,7 @@ str = ""
 while True:
     c = sys.stdin.read(1) # reads one byte at a time, similar to getchar()
     print(int(c))
-    bytes = bin(int(c[0:-2]))
+    bytes = "{0:b}".format(int(c))
     
     for index, item in enumerate(bytes):
         with canvas(device) as draw:
