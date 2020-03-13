@@ -12,7 +12,7 @@ device = max7219(serial,rotate=2)
 str = ""
 while True:
     c = sys.stdin.read(1) # reads one byte at a time, similar to getchar()
-    if(is_int(c)):
+    if(c.isdigit()):
         num = int(c)
         bytes = "{0:b}".format(int(c))
 
