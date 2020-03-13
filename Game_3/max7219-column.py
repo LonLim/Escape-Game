@@ -1,5 +1,9 @@
-import luma.led as led
+from luma.core.interface.serial import spi, noop
+from luma.core.render import canvas
+from luma.led_matrix.device import max7219
 
-matrix = led.matrix()
+serial = spi(port=0, device=0, gpio=noop())
+device = max7219(serial, cascaded=3)
 
-matrix.pixel(3, 3, 1)
+with canvas(device) as draw:
+   draw.rectangle(device.bounding_box, outline="white", fill="black")
