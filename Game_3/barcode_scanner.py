@@ -8,7 +8,7 @@ import argparse
 import datetime
 import imutils
 import time
-import cv2
+#import cv2
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -58,15 +58,19 @@ while True:
 
 		# if the barcode text is currently not in our CSV file, write
 		# the timestamp + barcode to disk and update the set
+		"""
 		if barcodeData not in found:
 			csv.write("{},{}\n".format(datetime.datetime.now(),
 				barcodeData))
 			csv.flush()
 			found.add(barcodeData)
+		"""
 
 	# show the output frame
+	"""
 	cv2.imshow("Barcode Scanner", frame)
 	key = cv2.waitKey(1) & 0xFF
+	"""
 	print(text)
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
@@ -75,5 +79,5 @@ while True:
 # close the output CSV file do a bit of cleanup
 print("[INFO] cleaning up...")
 csv.close()
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()
 vs.stop()
