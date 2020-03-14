@@ -50,25 +50,25 @@ while True:
 
         # the barcode data is a bytes object so if we want to draw it
         # on our output image we need to convert it to a string first
-        barcodeData = barcode.data.decode("utf-8")
-        barcodeType = barcode.type
-        text = "{} ({})".format(barcodeData, barcodeType)
+     barcodeData = barcode.data.decode("utf-8")
+     barcodeType = barcode.type
+     text = "{} ({})".format(barcodeData, barcodeType)
 
         # if the barcode text is currently not in our CSV file, write
         # the timestamp + barcode to disk and update the set
-	if text[0].isdigit():
-		bytes = "{0:04b}".format(int(text[0]))
-		print(bytes)
-	with canvas(device) as draw:
-		for index, item in enumerate(bytes):
-			if item != "0":
-				print(index)
-				draw.line((2 * index, 0, 2 * index, device.height), fill="white")
-				draw.line((2 * index + 1, 0, 2 * index + 1, device.height), fill="white")
+     if text[0].isdigit():
+      bytes = "{0:04b}".format(int(text[0]))
+      print(bytes)
+     with canvas(device) as draw:
+      for index, item in enumerate(bytes):
+       if item != "0":
+        print(index)
+        draw.line((2 * index, 0, 2 * index, device.height), fill="white")
+        draw.line((2 * index + 1, 0, 2 * index + 1, device.height), fill="white")
 
 
 # close the output CSV file do a bit of cleanup
-print("[INFO] cleaning up...")
-csv.close()
+#print("[INFO] cleaning up...")
+#csv.close()
 # cv2.destroyAllWindows()
-vs.stop()
+#vs.stop()
