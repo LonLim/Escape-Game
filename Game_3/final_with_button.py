@@ -44,6 +44,7 @@ while True:
     # have a maximum width of 400 pixels
     bytes ="0000"
     if GPIO.input(10) == GPIO.LOW:
+     printNum(bytes)
      continue
     frame = vs.read()
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -65,11 +66,15 @@ while True:
      if text[0].isdigit():
       bytes = "{0:04b}".format(int(text[0]))
       print(bytes)
-    with canvas(device) as draw:
+    printNum(bytes)
+
+def printNum(bytes):
+  with canvas(device) as draw:
      for index, item in enumerate(bytes):
       if item != "0":
        draw.line((2 * index, 0, 2 * index, device.height), fill="white")
        draw.line((2 * index + 1, 0, 2 * index + 1, device.height), fill="white")
+
 
 
 # close the output CSV file do a bit of cleanup
