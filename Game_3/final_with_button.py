@@ -15,6 +15,13 @@ import time
 import sys
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 
+def printNum(bytes):
+  with canvas(device) as draw:
+     for index, item in enumerate(bytes):
+      if item != "0":
+       draw.line((2 * index, 0, 2 * index, device.height), fill="white")
+       draw.line((2 * index + 1, 0, 2 * index + 1, device.height), fill="white")
+
 GPIO.setwarnings(False) # Ignore warning for now
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
 GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 to be an input pin and set initial value to be pulled low (off)
@@ -68,12 +75,7 @@ while True:
       print(bytes)
     printNum(bytes)
 
-def printNum(bytes):
-  with canvas(device) as draw:
-     for index, item in enumerate(bytes):
-      if item != "0":
-       draw.line((2 * index, 0, 2 * index, device.height), fill="white")
-       draw.line((2 * index + 1, 0, 2 * index + 1, device.height), fill="white")
+
 
 
 
