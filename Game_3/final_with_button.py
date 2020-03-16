@@ -25,6 +25,7 @@ def printNum(bytes):
 GPIO.setwarnings(False) # Ignore warning for now
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
 GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 to be an input pin and set initial value to be pulled low (off)
+GPIO.setup(18, GPIO.OUT)
 # construct the argument parser and parse the arguments
 serial = spi(port=0, device=0, gpio=noop())
 device = max7219(serial,rotate=2)
@@ -52,11 +53,12 @@ while True:
     bytes ="0000"
     if GPIO.input(10) == GPIO.LOW:
      printNum(bytes)
+     GPIO.output(18,GPIO.LOW)
      continue
     frame = vs.read()
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame = imutils.resize(frame, width=400, inter=cv2.INTER_CUBIC)
-
+    GPIO.output(18,GPIO.HIGH)
     # find the barcodes in the frame and decode each of the barcodes
     barcodes = pyzbar.decode(frame)
     # loop over the detected barcodes
