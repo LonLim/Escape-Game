@@ -68,6 +68,7 @@ uint8_t data[] = { 0x0, 0x0, 0x0, 0x0 };  // all segments clear
 void setup() {
   // open the serial port:
   Serial.begin(9600);
+  pixels.begin();
   digitalWrite(analog_button, HIGH);
   pinMode(analog_x, INPUT);
   pinMode(analog_y, INPUT);
