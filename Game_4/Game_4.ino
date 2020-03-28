@@ -3,6 +3,10 @@
 #define PIXEL_PIN 13
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_PIXELS, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
+#define laser 7
+#define laser_sensor 8
+int sensor = 0;
+
 #define x_direction A0
 int x_value = 0;
 
@@ -42,6 +46,8 @@ void setup() {
   pinMode(red_button,INPUT_PULLUP);
   pinMode(green_button,INPUT_PULLUP);
   pinMode(blue_button,INPUT_PULLUP);
+  pinMode(laser, OUTPUT);
+  pinMode(laser_sensor, INPUT);
   Serial.begin(9600);
   pixel.begin();
   startblinkMillis = millis();
@@ -50,6 +56,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  digitalWrite(laser, HIGH);
   get_color();
   show_color();
   startPressMillis = millis();
@@ -269,7 +276,16 @@ void wrong_answer() {
   memset(user_answer, -1, 12);
   current_set = 0;
   num_answer = game_set[current_set];
-  //Add show all red with blink
+  pixel.fill(pixel.Color(255, 0, 0), 0, 12);
+  pixel.show();
+  delay(500);
+  pixel.clear();
+  pixel.show();
+  pixel.fill(pixel.Color(255, 0, 0), 0, 12);
+  pixel.show();
+  delay(500);
+  pixel.clear();
+  pixel.show();
 }
 
 void correct_answer() {
@@ -283,6 +299,21 @@ void correct_answer() {
   while (current_set == 5)
   {
     //Add show all green
-    //On laser and detect LDR
+    sensor = digitalRead(laser_sensor);
+    if (sensor == HIGH)
+    {
+      pixel.fill(pixel.Color(0, 255, 0), 0, 12);
+      pixel.show();
+      delay(500);
+      pixel.clear();
+      pixel.show();
+      delay(500);
+      pixel.fill(pixel.Color(0, 255, 0), 0, 12);
+      pixel.show();
+      delay(500);
+      pixel.clear();
+      pixel.show();
+      delay(500);
+    }
   }
 }
