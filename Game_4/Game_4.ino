@@ -39,6 +39,9 @@ unsigned blinkMillis;
 
 void setup() {
   // put your setup code here, to run once:
+  pinMode(red_button,INPUT_PULLUP);
+  pinMode(green_button,INPUT_PULLUP);
+  pinMode(blue_button,INPUT_PULLUP);
   Serial.begin(9600);
   pixel.begin();
   startblinkMillis = millis();
@@ -50,13 +53,12 @@ void loop() {
   get_color();
   show_color();
   startPressMillis = millis();
-  while (startPressMillis != pressMillis)
+  while (millis()-startPressMillis <= pressMillis)
   {
     user_input();
     blink_or_show();
   }
   check_answer();
-  startPressMillis = 0;
 }
 
 void get_color() {
