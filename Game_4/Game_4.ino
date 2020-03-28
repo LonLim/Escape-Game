@@ -21,6 +21,7 @@ uint32_t cyan = pixel.Color(0, 255, 255);
 uint32_t purple = pixel.Color(250, 0, 255);
 uint32_t white = pixel.Color(255, 255, 255);
 uint32_t color_array[] = {red, green, blue, yellow, purple, cyan, white};
+bool current_status = false;
 
 int show_answer[12] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 int user_answer[12] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
@@ -33,11 +34,14 @@ int pos = 0;
 //Delays
 unsigned long startPressMillis;
 const unsigned pressMillis = 15000;
+unsigned long startblinkMillis = 0;
+unsigned blinkMillis;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   pixel.begin();
+  startblinkMillis = millis();
   num_answer = game_set[current_set];
 }
 
@@ -49,6 +53,7 @@ void loop() {
   while (startPressMillis != pressMillis)
   {
     user_input();
+    blink_or_show();
   }
   check_answer();
   startPressMillis = 0;
@@ -59,8 +64,7 @@ void get_color() {
   {
     if (index < num_answer)
     {
-      int color = random(0, 6);
-      show_answer[index] = color_array[color];
+      show_answer[index] = random(0,6);
     }
     else
     {
@@ -74,7 +78,7 @@ void show_color() {
   {
     if (show_answer[index] != -1)
     {
-      pixel.setPixelColor(index, show_answer[index]);
+      pixel.setPixelColor(index, color_array[show_answer[index]]);
       pixel.show();
       delay(500);
     }
@@ -109,64 +113,138 @@ void user_input() {
   green_value = digitalRead(green_button);
   if (red_value == '0')
   {
-    color_index = change_answer(user_answer[pos],0);
-    pixel.setPixelColor(pos, color_array[color_index]);
+    color_index = change_answer(user_answer[pos], 0);
+    user_answer[pos] = color_index;
   }
   if (blue_value == '0')
   {
-    color_index = change_answer(user_answer[pos],2);
-    pixel.setPixelColor(pos, color_array[color_index]);
+    color_index = change_answer(user_answer[pos], 2);
+    user_answer[pos] = color_index;
   }
   if (green_button == '0')
   {
-    color_index = change_answer(user_answer[pos],1);
-    pixel.setPixelColor(pos, color_array[color_index]);
+    color_index = change_answer(user_answer[pos], 1);
+    user_answer[pos] = color_index;
   }
 }
 
 int change_answer(int currentColor, int button) { //Li Long to input swtich case
-  
-  switch(currentColor){
 
-  case 0: // led was red
-  if (button == 0) {return 0;}  //red button detected, return red
-  else if(button ==1){return 3;}  //green button detected, return yellow
-  else{return 4;}     //blue button detected, return purple
+  switch (currentColor) {
 
-  case 1: // led is green
-  if (button == 0) {return 3;}  //return yellow
-  else if(button ==1){return 1;}  //return green
-  else{return 5;}     //return cyan
-  
-  case 2: // led is blue
-  if (button == 0) {return 4;}  //return purple 
-  else if(button ==1){return 5;}  //return cyan
-  else{return 2;}     //return blue
-  
-  case 3: // led is yellow
-  if (button == 0) {return 1;}  //remove red element, return green
-  else if(button ==1){return 0;}  //remove yellow element, return yellow
-  else{return 6;}     //add blue element, return white
-  
-  case 4: // led is purple
-  if (button == 0) {return 2;}  //return blue
-  else if(button ==1){return 6;}  //return white
-  else{return 0;}     //return red
+    case 0: // led was red
+      if (button == 0)
+      {
+        return 0;
+      }  //red button detected, return red
+      else if (button == 1)
+      {
+        return 3; //green button detected, return yellow
+      }  
+      else {
+        return 4; //blue button detected, return purple
+      }
+
+    case 1: // led is green
+      if (button == 0) {
+        return 3; //return yellow
+      }
+      else if (button == 1) {
+        return 1; //return green
+      }
+      else {
+        return 5; //return cyan
+      }
+
+    case 2: // led is blue
+      if (button == 0) {
+        return 4; //return purple
+      }
+      else if (button == 1) {
+        return 5; //return cyan
+      }
+      else {
+        return 2; //return blue
+      }
+
+    case 3: // led is yellow
+      if (button == 0) {
+        return 1; //remove red element, return green
+      }
+      else if (button == 1) {
+        return 0; //remove yellow element, return yellow
+      }
+      else {
+        return 6; //add blue element, return white
+      }
+
+    case 4: // led is purple
+      if (button == 0) {
+        return 2; //return blue
+      }
+      else if (button == 1) {
+        return 6; //return white
+      }
+      else {
+        return 0; //return red
+      }
+
+    case 5: // led is cyan
+      if (button == 0) {
+        return 6; //return white
+      }
+      else if (button == 1) {
+        return 2; //return blue
+      }
+      else {
+        return 0; //return green
+      }
+
+    case 6: // led is white
+      if (button == 0) {
+        return 5; //return cyan
+      }
+      else if (button == 1) {
+        return 4; //return purple
+      }
+      else {
+        return 3; //return yellow
+      }
+
+    default: // no led
+      if (button == 0) {
+        return 0; //red button detected
+      }
+      else if (button == 1) {
+        return 1; //green button detected
+      }
+      else {
+        return 2; //blue button detected
+      }
+  }
+}
+
+void blink_or_show() {
+  for (int index = 0; index < 12; index++)
+  {
+    pixel.setPixelColor(index, color_array[user_answer[index]]);
+    pixel.show();
+  }
+  if (startblinkMillis - blinkMillis >= 500)
+  {
+    if(current_status == false)
+    {
+      pixel.setPixelColor(pos, color_array[user_answer[pos]]);
+      current_status = true;
+      blinkMillis = startblinkMillis;
+    }
+    else
+    {
+      pixel.setPixelColor(pos, pixel.Color(0, 0, 0));
+      current_status = false;
+      blinkMillis = startblinkMillis;
+    }
     
-  case 5: // led is cyan
-  if (button == 0) {return 6;}  //return white 
-  else if(button == 1){return 2;} //return blue
-  else{return 0;}     //return green
-  
-  case 6: // led is white   
-  if (button == 0) {return 5;}  //return cyan
-  else if(button == 1){return 4;} //return purple
-  else{return 3;}     //return yellow
-  
-  default: // no led 
-  if (button == 0) {return 0;}  //red button detected
-  else if(button ==1){return 1;}  //green button detected
-  else{return 2;}     //blue button detected
   }
 }
 
