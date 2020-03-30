@@ -37,15 +37,15 @@ int pos = 0;
 
 //Delays
 unsigned long startPressMillis;
-const unsigned pressMillis = 15000;
+const unsigned pressMillis = 20000;
 unsigned long startblinkMillis = 0;
 unsigned blinkMillis;
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(red_button,INPUT_PULLUP);
-  pinMode(green_button,INPUT_PULLUP);
-  pinMode(blue_button,INPUT_PULLUP);
+  pinMode(red_button, INPUT_PULLUP);
+  pinMode(green_button, INPUT_PULLUP);
+  pinMode(blue_button, INPUT_PULLUP);
   pinMode(laser, OUTPUT);
   pinMode(laser_sensor, INPUT);
   Serial.begin(9600);
@@ -60,7 +60,7 @@ void loop() {
   get_color();
   show_color();
   startPressMillis = millis();
-  while (millis()-startPressMillis <= pressMillis)
+  while (millis() - startPressMillis <= pressMillis)
   {
     user_input();
     blink_or_show();
@@ -73,7 +73,7 @@ void get_color() {
   {
     if (index < num_answer)
     {
-      show_answer[index] = random(0,6);
+      show_answer[index] = random(0, 6);
     }
     else
     {
@@ -149,7 +149,7 @@ int change_answer(int currentColor, int button) { //Li Long to input swtich case
       else if (button == 1)
       {
         return 3; //green button detected, return yellow
-      }  
+      }
       else {
         return 4; //blue button detected, return purple
       }
@@ -241,7 +241,7 @@ void blink_or_show() {
   }
   if (startblinkMillis - blinkMillis >= 500)
   {
-    if(current_status == false)
+    if (current_status == false)
     {
       pixel.setPixelColor(pos, color_array[user_answer[pos]]);
       current_status = true;
@@ -253,7 +253,7 @@ void blink_or_show() {
       current_status = false;
       blinkMillis = startblinkMillis;
     }
-    
+
   }
 }
 
@@ -292,14 +292,15 @@ void correct_answer() {
   current_set = current_set + 1;
   memset(show_answer, -1, 12);
   memset(user_answer, -1, 12);
+  //include stepper motor movement
   if (current_set < 5)
   {
     num_answer = game_set[current_set];
   }
   while (current_set == 5)
   {
-    //Add show all green
     sensor = digitalRead(laser_sensor);
+    //turn servo
     if (sensor == HIGH)
     {
       pixel.fill(pixel.Color(0, 255, 0), 0, 12);
@@ -308,12 +309,10 @@ void correct_answer() {
       pixel.clear();
       pixel.show();
       delay(500);
-      pixel.fill(pixel.Color(0, 255, 0), 0, 12);
-      pixel.show();
-      delay(500);
-      pixel.clear();
-      pixel.show();
-      delay(500);
     }
   }
+}
+
+void time_and_set() {
+  //Li Long to add in
 }
