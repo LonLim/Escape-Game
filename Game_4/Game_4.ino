@@ -1,22 +1,37 @@
+//NeoPixels
 #include <Adafruit_NeoPixel.h>
 #define NUM_PIXELS 14
 #define PIXEL_PIN 3
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_PIXELS, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
-#define laser 4
-#define laser_sensor 5
+//Stepper Motor
+#include <AccelStepper.h>
+#define motorPin1  4      // IN1 on the ULN2003 driver
+#define motorPin2  5      // IN2 on the ULN2003 driver
+#define motorPin3  6     // IN3 on the ULN2003 driver
+#define motorPin4  7     // IN4 on the ULN2003 driver
+#define MotorInterfaceType 8
+AccelStepper stepper = AccelStepper(MotorInterfaceType, motorPin1, motorPin3, motorPin2, motorPin4);
+int stepper_position = 0;
+
+//Laser and Light Dependent Resistor
+#define laser 8
+#define laser_sensor 9
 int sensor = 0;
 
+//Analog Joystick
 #define x_direction A0
 int x_value = 0;
 
-#define red_button 6
-#define blue_button 7
-#define green_button 8
+//Red, Blue, Green Button
+#define red_button 10
+#define blue_button 11
+#define green_button 12
 int red_value = 1;
 int blue_value = 1;
 int green_value = 1;
 
+//Color in RGB format
 uint32_t red = pixel.Color(255, 0, 0);
 uint32_t green = pixel.Color(0, 255, 0);
 uint32_t blue = pixel.Color(0, 0, 255);
@@ -27,9 +42,11 @@ uint32_t white = pixel.Color(255, 255, 255);
 uint32_t color_array[] = {red, green, blue, yellow, purple, cyan, white};
 bool current_status = false;
 
-#define start_button 9
+//Start Button
+#define start_button 13
 bool start_game = false;
 
+//Answer and inputs
 int show_answer[12] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 int user_answer[12] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 int game_set[5] = {6, 7, 8, 10, 12};
@@ -53,6 +70,8 @@ void setup() {
   pinMode(laser, OUTPUT);
   pinMode(laser_sensor, INPUT);
   Serial.begin(9600);
+  stepper.setMaxSpeed(1000); // Set the maximum steps per second
+  stepper.setAcceleration(200); // Set the maximum acceleration in steps per second^2
   pixel.begin();
   startblinkMillis = millis();
   num_answer = game_set[current_set];
@@ -288,6 +307,8 @@ void wrong_answer() {
   current_set = 0;
   start_game = false;
   num_answer = game_set[current_set];
+  stepper.moveTo(0);
+  stepper.runToPosition();
   pixel.fill(pixel.Color(255, 0, 0), 0, 12);
   pixel.show();
   delay(500);
@@ -304,7 +325,9 @@ void correct_answer() {
   current_set = current_set + 1;
   memset(show_answer, -1, 12);
   memset(user_answer, -1, 12);
-  //include stepper motor movement
+  stepper_position = stepper_position + 1500; //Derrick to decide the total amount to reach from bot to top then divide by 5 to replace 1500
+  stepper.moveTo(stepper_position);
+  stepper.runToPosition();
   if (current_set < 5)
   {
     num_answer = game_set[current_set];
@@ -326,5 +349,5 @@ void correct_answer() {
 }
 
 void time_and_set() {
-  //Li Long to add in
+  //Li Long to add in to display time and current set
 }
