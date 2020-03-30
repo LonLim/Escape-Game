@@ -1,18 +1,18 @@
 #include <Adafruit_NeoPixel.h>
 #define NUM_PIXELS 14
-#define PIXEL_PIN 13
+#define PIXEL_PIN 3
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_PIXELS, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
-#define laser 7
-#define laser_sensor 8
+#define laser 4
+#define laser_sensor 5
 int sensor = 0;
 
 #define x_direction A0
 int x_value = 0;
 
-#define red_button 4
-#define blue_button 5
-#define green_button 6
+#define red_button 6
+#define blue_button 7
+#define green_button 8
 int red_value = 1;
 int blue_value = 1;
 int green_value = 1;
@@ -26,6 +26,9 @@ uint32_t purple = pixel.Color(250, 0, 255);
 uint32_t white = pixel.Color(255, 255, 255);
 uint32_t color_array[] = {red, green, blue, yellow, purple, cyan, white};
 bool current_status = false;
+
+#define start_button 9
+bool start_game = false;
 
 int show_answer[12] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 int user_answer[12] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
@@ -43,6 +46,7 @@ unsigned blinkMillis;
 
 void setup() {
   // put your setup code here, to run once:
+  pinMode(start_button, INPUT_PULLUP);
   pinMode(red_button, INPUT_PULLUP);
   pinMode(green_button, INPUT_PULLUP);
   pinMode(blue_button, INPUT_PULLUP);
@@ -56,16 +60,23 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  digitalWrite(laser, HIGH);
-  get_color();
-  show_color();
-  startPressMillis = millis();
-  while (millis() - startPressMillis <= pressMillis)
+  if (digitalRead(start_button == '0'))
   {
-    user_input();
-    blink_or_show();
+    start_game = true;
   }
-  check_answer();
+  while (start_game == true)
+  {
+    digitalWrite(laser, HIGH);
+    get_color();
+    show_color();
+    startPressMillis = millis();
+    while (millis() - startPressMillis <= pressMillis)
+    {
+      user_input();
+      blink_or_show();
+    }
+    check_answer();
+  }
 }
 
 void get_color() {
@@ -275,6 +286,7 @@ void wrong_answer() {
   memset(show_answer, -1, 12);
   memset(user_answer, -1, 12);
   current_set = 0;
+  start_game = false;
   num_answer = game_set[current_set];
   pixel.fill(pixel.Color(255, 0, 0), 0, 12);
   pixel.show();
