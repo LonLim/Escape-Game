@@ -13,8 +13,9 @@ from luma.core.render import canvas
 from luma.led_matrix.device import max7219
 import time
 import sys
-import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
+import RPi.GPIO as GPIO
 
+#function to draw binary into dot_matrix
 def printNum(bytes):
   with canvas(device) as draw:
      for index, item in enumerate(bytes):
@@ -24,8 +25,9 @@ def printNum(bytes):
 
 GPIO.setwarnings(False) # Ignore warning for now
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
-GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 to be an input pin and set initial value to be pulled low (off)
-GPIO.setup(18, GPIO.OUT)
+GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 to be the input to read the trigger button
+GPIO.setup(18, GPIO.OUT) # Set pin 18 to be the output to the laser module
+
 # construct the argument parser and parse the arguments
 serial = spi(port=0, device=0, gpio=noop())
 device = max7219(serial,rotate=2)
@@ -51,7 +53,7 @@ while True:
     # change frame to grayscale
     # have a maximum width of 400 pixels
     bytes ="0000"
-    if GPIO.input(10) == GPIO.LOW:
+    if GPIO.input(10) == GPIO.LOW: #if trigger not pressed , off the dot_matrix and laser
      printNum(bytes)
      GPIO.output(18,GPIO.LOW)
      continue
@@ -69,20 +71,8 @@ while True:
      barcodeData = barcode.data.decode("utf-8")
      barcodeType = barcode.type
      text = "{} ({})".format(barcodeData, barcodeType)
-
-        # if the barcode text is currently not in our CSV file, write
-        # the timestamp + barcode to disk and update the set
-     if text[0].isdigit():
+    
+     if text[0].isdigit(): #check whether the QR code is digit
       bytes = "{0:04b}".format(int(text[0]))
       print(bytes)
     printNum(bytes)
-
-
-
-
-
-# close the output CSV file do a bit of cleanup
-#print("[INFO] cleaning up...")
-#csv.close()
-# cv2.destroyAllWindows()
-#vs.stop()
