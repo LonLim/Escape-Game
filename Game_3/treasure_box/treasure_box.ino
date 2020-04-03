@@ -73,10 +73,10 @@ void loop() {
 
     if (match == 4) {
       digitalWrite(GreenLED, HIGH);
-      myservo.write(180);
+      myservo.write(90);
     }
     else if (match == -4) { //reset everything and lock the box.
-      myservo.write(90);
+      myservo.write(180);
       digitalWrite(GreenLED, LOW);
       digitalWrite(RedLED, LOW);
     }
