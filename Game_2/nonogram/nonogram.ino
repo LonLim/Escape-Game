@@ -1,5 +1,10 @@
-// reference for neopixel: https://create.arduino.cc/projecthub/glowascii/neopixel-leds-arduino-basics-126d1a
+//Define neopixel pin and number
 #include <Adafruit_NeoPixel.h>
+#define NEOPIXEL1 2
+#define NUMPIXELS 64
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIXEL1, NEO_GRB + NEO_KHZ800);
+
+//Variables
 int playerPosition = 0;
 int location[64];
 
@@ -12,17 +17,12 @@ int location[64];
 //Reset pin
 #define reset 12
 
-//Define neopixel pin and number
-#define NEOPIXEL1 2
-#define NUMPIXELS 64
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIXEL1, NEO_GRB + NEO_KHZ800);
-
 //Initialize value for joystick
 int x_value = 0;
 int y_value = 0;
 int swtich = 0;
 
-//Variable and array for Clue(Zhi Sheng to insert the array in)
+//Variable and array for Clue
 int clue_row = 0;
 int clue_array[3][28] = {
   {11, 4, 2, 1, 111, 4, 112, 3, 3311, 0, 2214, 0, 1, 4, 13, 4, 52, 4, 1, 4, 51, 4, 13, 4, 4, 4, 1, 4},
@@ -59,14 +59,13 @@ TM1637Display display8(CLK, DIO7);
 TM1637Display display9(CLK, DIO8); 
 TM1637Display display10(CLK, DIO9); 
 TM1637Display display11(CLK, AIO2);
-TM1637Display display12(CLK, AI03);
-TM1637Display display13(CLK, AI04);
-TM1637Display display14(CLK, AI05);
+TM1637Display display12(CLK, AIO3);
+TM1637Display display13(CLK, AIO4);
+TM1637Display display14(CLK, AIO5);
 
 uint8_t data[] = { 0x0, 0x0, 0x0, 0x0 };  // all segments clear
 
 void setup() {
-  // open the serial port:
   Serial.begin(9600);
   pixels.begin();
   digitalWrite(analog_button, HIGH);
@@ -89,7 +88,8 @@ void setup() {
   display11.setBrightness(0x0f);  
   display12.setBrightness(0x0f); 
   display13.setBrightness(0x0f);
-  display14.setBrightness(0x0f); 
+  display14.setBrightness(0x0f);
+  
   //Fill all display with empty data
   display1.setSegments(data);
   display2.setSegments(data);  
@@ -108,14 +108,16 @@ void setup() {
 }
 
 void loop() {
+  //check if reset pin is HIGH
   checkReset();
+
+  //Display the clue in 7-Segments
   displayClue();
   
   // check for incoming data from joystick
   x_value = analogRead(analog_x);
   y_value = analogRead(analog_y);
   swtich = digitalRead(analog_button);
-  
   if (y_value < 400)
   {
     playerPosition = playerPosition - 1;
@@ -154,7 +156,8 @@ void loop() {
   }
 }
 
-void updateLocation (int playerPosition)  { // Update the location of the pixel
+// Update the location of the pixel
+void updateLocation (int playerPosition)  { 
   //memset(location,0,sizeof(location));
   //easiest way to reset all array to zero
   initLocation(playerPosition);
@@ -162,6 +165,7 @@ void updateLocation (int playerPosition)  { // Update the location of the pixel
   {
     location[playerPosition] = 1;
   }
+  //For Debugging
   for (int row = 0; row < 8; row++)
   {
     for (int col = 0; col < 8; col++)
@@ -177,7 +181,8 @@ void updateLocation (int playerPosition)  { // Update the location of the pixel
   setLEDColor();
 }
 
-int checkSideBountary(int playerPosition) { // check if position has moved out of side boundary
+//Prevent user from going over the side boundary of the board
+int checkSideBountary(int playerPosition) {
   if (playerPosition < 0)
   {
     playerPosition = playerPosition + 64;
@@ -189,7 +194,8 @@ int checkSideBountary(int playerPosition) { // check if position has moved out o
   return playerPosition;
 }
 
-int checkBottomBountary(int playerPosition) { // check if position has moved out of bottom boundary
+//Prevent user from going over the bottom boundary of the board
+int checkBottomBountary(int playerPosition) {
   if (playerPosition % 8 == 0)
   {
     playerPosition = playerPosition - 8;
@@ -197,7 +203,8 @@ int checkBottomBountary(int playerPosition) { // check if position has moved out
   return playerPosition;
 }
 
-int checkTopBountary(int playerPosition) { // check if position has moved out of top boundary
+//Prevent user from going over the top boundary of the board
+int checkTopBountary(int playerPosition) {
   if ((playerPosition + 1) % 8 == 0)
   {
     playerPosition = playerPosition + 8;
@@ -205,7 +212,8 @@ int checkTopBountary(int playerPosition) { // check if position has moved out of
   return playerPosition;
 }
 
-void initLocation(int playerPosition) { // init all pixel and change to its relevant number accordingly
+//Init all pixel and change to its relevant number accordingly
+void initLocation(int playerPosition) { 
    for (int position = 0; position < 64; position++)
    {
       if(location[position] == 3)
@@ -223,8 +231,9 @@ void initLocation(int playerPosition) { // init all pixel and change to its rele
    }
 }
 
+//Update location to the pixel
 void setLEDColor()  {    
-   for(int position = 0; position < 64; position++){ //update location to the pixel
+   for(int position = 0; position < 64; position++){ 
       switch (location[position]){
         case 1:
           pixels.setPixelColor(position, pixels.Color(150,0,0)); // Moderately bright red color.
@@ -243,6 +252,7 @@ void setLEDColor()  {
   }
 }
 
+//Check if reset pin is HIGH
 void checkReset() {
   if ( digitalRead(reset) == HIGH)
   {
@@ -254,6 +264,7 @@ void checkReset() {
   }
 }
 
+//Display clue at 7 segments
 void displayClue() {
   display1.setSegments(data);// fill(clear) display with data[] clue_array
   display1.showNumberDec(clue_array[clue_row][0], 0, clue_array[clue_row][1]);// display 1

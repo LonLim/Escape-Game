@@ -1,26 +1,33 @@
+//Libraries
 #include <Keypad.h>
 #include <Servo.h>
+
 #define GreenLED 13
 #define RedLED 12
-const byte ROWS = 4; //four rows
-const byte COLS = 3; //four columns
-//define the cymbols on the buttons of the keypads
+
+
 unsigned long time;
 Servo myservo;
 char password[] = { '9', '4', '5', '8'};
 char password_keyed [5];
 int index = 0;
 int match = 0;
+
+//define the symbols on the buttons of the keypads
+const byte ROWS = 4; //four rows
+const byte COLS = 3; //four columns
 char hexaKeys[ROWS][COLS] = {
   {'1', '2', '3'},
   {'4', '5', '6'},
   {'7', '8', '9'},
   {'*', '0', '#'}
 };
+
+//initialize an instance of class NewKeypad
 byte rowPins[ROWS] = {9, 8, 7, 6}; //connect to the row pinouts of the keypad
 byte colPins[COLS] = {5, 4, 3}; //connect to the column pinouts of the keypad
-//initialize an instance of class NewKeypad
 Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+
 void setup() {
   //Serial.begin(9600);
   pinMode(GreenLED, OUTPUT);
@@ -30,7 +37,7 @@ void setup() {
 }
 
 void loop() {
-
+  //Get keypad pressed
   char customKey = customKeypad.getKey();
   if (customKey) { //check whether the user entered a key in the keypad
     password_keyed[index] = customKey;

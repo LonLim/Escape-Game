@@ -1,8 +1,10 @@
+//Neopixel pins and library define
 #include <Adafruit_NeoPixel.h>
-
 #define NeoPixelPin 9
-
 #define PixelCount 36
+Adafruit_NeoPixel sample = Adafruit_NeoPixel(PixelCount, NeoPixelPin, NEO_GRB + NEO_KHZ800);
+
+//Light Dependent Resistor Pins
 #define column1laser A0
 #define column2laser A1
 #define column3laser A2
@@ -10,19 +12,16 @@
 #define column5laser A4
 #define column6laser A5
 
+//User input
 int user_answer[4] = { -1, -1, -1, -1};
+
+//Correct Answer
 int laser_answer[4] = {5, 2, 1, 0};
 
+//Variables
 int match = 0;
 int counter;
-
 bool correct = false;
-
-unsigned long delayStart = 0;
-
-int position = -1;
-
-int user_ans_index = 0;
 
 int val1 = 0;
 int val2 = 0;
@@ -45,7 +44,12 @@ int column4_index = 6;
 int column5_index = 6;
 int column6_index = 6;
 
-Adafruit_NeoPixel sample = Adafruit_NeoPixel(PixelCount, NeoPixelPin, NEO_GRB + NEO_KHZ800);
+int position = -1;
+
+int user_ans_index = 0;
+
+//Millis Delay
+unsigned long delayStart = 0;
 
 void setup () {
   delayStart = millis();   // start delay
@@ -61,7 +65,7 @@ void setup () {
   sample.show();
 }
 void loop() {
-
+  //Check value of all LDRs
   oldVal1 = analogRead(column1laser);
   oldVal2 = analogRead(column2laser);
   oldVal3 = analogRead(column3laser);
@@ -69,7 +73,7 @@ void loop() {
   oldVal5 = analogRead(column5laser);
   oldVal6 = analogRead(column6laser);
 
-  if (millis() - delayStart >= 1500) {
+  if (millis() - delayStart >= 1500) { //Check new current after 1.5sec to prevent error detection
 
     val1 = analogRead(column1laser);
     val2 = analogRead(column2laser);
@@ -79,7 +83,8 @@ void loop() {
     val6 = analogRead(column6laser);
     delayStart = millis();
   }
-
+  
+  //check which LDR is light in the series and get position
   if (abs(val1 - oldVal1) < 5) {
     column1_index = sensor_values(val1);
   }
@@ -99,6 +104,7 @@ void loop() {
     column6_index = sensor_values(val6);
   }
 
+  //light up the corresponding pixel of the LDR
   if (column1_index != 6) {
     position = column1_index;
     light_up_maze();
@@ -123,11 +129,15 @@ void loop() {
     position = 30 + column6_index;
     light_up_maze();
   }
+
+  //For Debugging
   for (int i = 0; i < 4; i++) {
     Serial.print(user_answer[i]);
     Serial.print(",");
   }
   Serial.println(' ');
+
+  //Check if user input is the correct answer
   if (user_ans_index == 4) {
     for (int i = 0; i < 4; i++) {
       if (laser_answer[i] == user_answer[i]) {
@@ -146,8 +156,9 @@ void loop() {
   }
 }
 
+//Check which LDR has been light
 int sensor_values(int val) {
-  if (val > 500) { //when the LDR is is covered
+  if (val > 500) {
     return 0;
   }
   else if ( (400 > val) && (val > 321)) {
@@ -170,11 +181,12 @@ int sensor_values(int val) {
   }
 }
 
+//light up corresponding neopixel
 void light_up_maze() {
   sample.setPixelColor(position, sample.Color(150, 150, 150));
   sample.show();
-  for (int i = 0; i < 4; i++) { //check if user shoot same target twice
-    if (user_answer[i] == position) {
+  for (int index = 0; index < 4; index++) { //check if user shoot same target twice
+    if (user_answer[index] == position) {
       return;
     }
   }
@@ -182,6 +194,7 @@ void light_up_maze() {
   user_ans_index = user_ans_index + 1;
 }
 
+//Force game to stop after clear game
 void green_all_pixels() {
   while (correct == true) {
     Serial.print(counter);
@@ -201,8 +214,9 @@ void green_all_pixels() {
   }
 }
 
+//Reset game if user is wrong
 void reset_pixels() {
-  for (int j = 0; j < 3; j++) {
+  for (int blinkcount = 0; blinkcount < 3; blinkcount++) {
     sample.fill(sample.Color(150, 0, 0), 0, 36);
     sample.show();
     delay(500);

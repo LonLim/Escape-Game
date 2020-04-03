@@ -1,3 +1,4 @@
+//Buttons Pins
 #define column1Button A0
 #define column2Button A1
 #define column3Button A2
@@ -13,14 +14,17 @@
 #define NUMPIXELS 64
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIXELS, NEO_GRB + NEO_KHZ800);
 
+//Maze Answer
 int maze_array[3][31] = {
   {39, 38, 30, 22, 14, 13, 12, 20, 28, 36, 44, 45, 53, 61, 60, 59, 58, 50, 49, 41, 33, 34, 26, 18, 10, 2, 1, 0, -1, -1, -1},
   {63, 62, 61, 60, 59, 51, 43, 44, 45, 46, 38, 30, 29, 21, 13, 12, 4, 3, 2, 10, 18, 26, 34, 33, 41, 40, -1, -1, -1, -1, -1},
   {7, 6, 5, 4, 3, 2, 1, 9, 17, 25, 26, 34, 35, 36, 28, 20, 21, 22, 30, 38, 46, 45, 53, 52, 60, 59, 58, 50, 49, 41, 40},
 };
 
+//Reset pin
 #define reset 1
 
+//Variables
 int position = 0;
 int old_correct = 0;
 int new_correct = 0;
@@ -59,6 +63,7 @@ void setup() {
 }
 
 void loop() {
+  //Read buttons input
   column1Input = analogRead(column1Button);
   column2Input = analogRead(column2Button);
   column3Input = analogRead(column3Button);
@@ -68,6 +73,7 @@ void loop() {
   column7Input = analogRead(column7Button);
   column8Input = analogRead(column8Button);
 
+  //Check which button has been pressed
   column1_index = check_button_push(column1Input);
   column2_index = check_button_push(column2Input);
   column3_index = check_button_push(column3Input);
@@ -77,6 +83,7 @@ void loop() {
   column7_index = check_button_push(column7Input);
   column8_index = check_button_push(column8Input);
 
+  //Get postion according to button pressed
   if ( column1_index != 8)
   {
     position = column1_index;
@@ -109,8 +116,12 @@ void loop() {
   {
     position = 56 + column8_index;
   }
+
+  //Light up the respective neopixel
   new_correct = light_up_maze();
   pixels.show();
+
+  //Check if user has stepped the wrong answer
   if (new_correct < old_correct)
   {
     reset_maze();
@@ -118,9 +129,11 @@ void loop() {
   else
   {
     check_maze();
+    old_correct = new_correct;
   }
 }
 
+//Check button in the series has been pressed
 int check_button_push(int input) {
   if (input > 1000)
   {
@@ -160,26 +173,28 @@ int check_button_push(int input) {
   }
 }
 
+//Light up respective pixel and check if answer is correct
 int light_up_maze() {
   if (position == maze_array[maze_answer_row][current_pos])
     {
       pixels.setPixelColor(position, pixels.Color(0,150,0)); // Moderately bright green color.
-      correct  = correct + 1;
+      new_correct  = new_correct + 1;
       current_pos = current_pos + 1;
     }
   else
     {
       pixels.setPixelColor(position, pixels.Color(150,0,0)); // Moderately bright red color.
-      correct = correct - 1;
+      new_correct = new_correct - 1;
     }
-  return correct;
+  return new_correct;
 }
 
+//Check if maze has been completed
 void check_maze() {
   switch (maze_answer_row)
   {
     case 0: 
-    while (correct == 28)
+    while (new_correct == 28)
     {
       for (int index = 0; index < 64; index++)
       {
@@ -188,7 +203,7 @@ void check_maze() {
       pixels.show();
     }
     case 1:
-    while (correct == 26)
+    while (new_correct == 26)
     {
       for (int index = 0; index < 64; index++)
       {
@@ -197,7 +212,7 @@ void check_maze() {
       pixels.show();
     }
     case 2: 
-    while (correct == 31)
+    while (new_correct == 31)
     {
       for (int index = 0; index < 64; index++)
       {
@@ -208,6 +223,7 @@ void check_maze() {
   }
 }
 
+//Reset maze if user has stepped wrong
 void reset_maze() {
   for (int index = 0; index < 64; index++)
   {
@@ -215,7 +231,7 @@ void reset_maze() {
   }
   pixels.show();
   digitalWrite(reset, HIGH);
-  olc_correct = 0;
+  old_correct = 0;
   new_correct = 0;
   current_pos = 0;
   maze_answer_row = maze_answer_row + 1;
