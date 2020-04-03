@@ -140,18 +140,18 @@ void loop() {
   //Check if user input is the correct answer
   if (user_ans_index == 4) {
     for (int i = 0; i < 4; i++) {
-      if (laser_answer[i] == user_answer[i]) {
+      if (laser_answer[i] == user_answer[i]) {//check if answer is "shoot" in order
         match ++;
       }
     }
     if ( match == 4) {
-      correct = true;
+      correct = true; //Allow game to stop playing
       green_all_pixels();
     }
     else {
       reset_pixels();
       user_ans_index = 0;
-      memset(user_answer, -1, sizeof(user_answer));
+      memset(user_answer, -1, sizeof(user_answer));//reset array element to -1
     }
   }
 }
@@ -183,26 +183,26 @@ int sensor_values(int val) {
 
 //light up corresponding neopixel
 void light_up_maze() {
-  sample.setPixelColor(position, sample.Color(150, 150, 150));
-  sample.show();
+  sample.setPixelColor(position, sample.Color(150, 150, 150));//Display White color
+  sample.show();//show pixel
   for (int index = 0; index < 4; index++) { //check if user shoot same target twice
     if (user_answer[index] == position) {
       return;
     }
   }
-  user_answer[user_ans_index] = position;
-  user_ans_index = user_ans_index + 1;
+  user_answer[user_ans_index] = position;//save user answer
+  user_ans_index = user_ans_index + 1;//shift to next index
 }
 
 //Force game to stop after clear game
 void green_all_pixels() {
   while (correct == true) {
     Serial.print(counter);
-    if (counter == 3) {
+    if (counter == 3) {//clear the board and freeze it
       sample.clear();
       sample.show();
     }
-    else {
+    else { //blink whole board with green light
       sample.fill(sample.Color(0, 150, 0), 0, 36);
       sample.show();
       delay(500);
@@ -216,7 +216,7 @@ void green_all_pixels() {
 
 //Reset game if user is wrong
 void reset_pixels() {
-  for (int blinkcount = 0; blinkcount < 3; blinkcount++) {
+  for (int blinkcount = 0; blinkcount < 3; blinkcount++) {//blink all board with red light for 3 times
     sample.fill(sample.Color(150, 0, 0), 0, 36);
     sample.show();
     delay(500);

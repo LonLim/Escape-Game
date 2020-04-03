@@ -178,46 +178,37 @@ int light_up_maze() {
   if (position == maze_array[maze_answer_row][current_pos])
     {
       pixels.setPixelColor(position, pixels.Color(0,150,0)); // Moderately bright green color.
-      new_correct  = new_correct + 1;
-      current_pos = current_pos + 1;
+      new_correct  = new_correct + 1;//increase correct to compare with old value
+      current_pos = current_pos + 1;//shift index of answer array
     }
   else
     {
       pixels.setPixelColor(position, pixels.Color(150,0,0)); // Moderately bright red color.
-      new_correct = new_correct - 1;
+      new_correct = new_correct - 1;//decrease correct to compare with old value
     }
   return new_correct;
 }
 
 //Check if maze has been completed
 void check_maze() {
-  switch (maze_answer_row)
+  switch (maze_answer_row) //check with maze answer currently on
   {
     case 0: 
-    while (new_correct == 28)
+    while (new_correct == 28) //force freeze
     {
-      for (int index = 0; index < 64; index++)
-      {
-        pixels.setPixelColor(position, pixels.Color(0,150,0)); // STAY GREEN THROUGHOUT
-      }
+      pixels.fill(pixels.Color(0, 150, 0), 0, 64);
       pixels.show();
     }
     case 1:
-    while (new_correct == 26)
+    while (new_correct == 26) //force freeze
     {
-      for (int index = 0; index < 64; index++)
-      {
-        pixels.setPixelColor(position, pixels.Color(0,150,0)); // STAY GREEN THROUGHOUT
-      }
+      pixels.fill(pixels.Color(0, 150, 0), 0, 64);
       pixels.show();
     }
     case 2: 
-    while (new_correct == 31)
+    while (new_correct == 31) //force freeze
     {
-      for (int index = 0; index < 64; index++)
-      {
-        pixels.setPixelColor(position, pixels.Color(0,150,0)); // STAY GREEN THROUGHOUT
-      }
+      pixels.fill(pixels.Color(0, 150, 0), 0, 64);
       pixels.show();
     }
   }
@@ -225,17 +216,14 @@ void check_maze() {
 
 //Reset maze if user has stepped wrong
 void reset_maze() {
-  for (int index = 0; index < 64; index++)
-  {
-    pixels.setPixelColor(position, pixels.Color(0,0,0)); // Clear maze
-  }
+  pixels.clear();
   pixels.show();
   digitalWrite(reset, HIGH);
   old_correct = 0;
   new_correct = 0;
   current_pos = 0;
-  maze_answer_row = maze_answer_row + 1;
-  if (maze_answer_row == 3)
+  maze_answer_row = maze_answer_row + 1;//change maze answer
+  if (maze_answer_row == 3)//reset if over boundary
   {
     maze_answer_row = 0;
   }
