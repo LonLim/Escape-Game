@@ -16,7 +16,7 @@ int keys[ROWS][COLS] = {
 byte rowPins[ROWS] = {3, 4, 5, 6, 7, 8, 9, 10};
 byte colPins[COLS] = {11, 12, 13, 14, 15, 16, 17};
 
-keypad location = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
+Keypad location = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 //Define neopixel pin and number
 #include <Adafruit_NeoPixel.h>
@@ -53,9 +53,9 @@ void loop() {
     {
       if ( location.key[0].stateChanged) //Find all button that are pressed
       {
-        if (location.key[i].kstate == PRESSED) //Check for new button
+        if (location.key[index].kstate == PRESSED) //Check for new button
         {
-          position = location.key[i]
+          position = int(location.key[index].kchar);
         }
       }
     }
