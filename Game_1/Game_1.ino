@@ -183,7 +183,7 @@ int sensor_values(int val) {
 
 //light up corresponding neopixel
 void light_up_maze() {
-  sample.setPixelColor(position, sample.Color(150, 150, 150));//Display White color
+  sample.setPixelColor(position, sample.Color(75, 75, 75));//Display White color
   sample.show();//show pixel
   for (int index = 0; index < 4; index++) { //check if user shoot same target twice
     if (user_answer[index] == position) {
