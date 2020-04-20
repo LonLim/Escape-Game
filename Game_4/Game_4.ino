@@ -43,7 +43,8 @@ uint32_t yellow = pixel.Color(255, 255, 0);
 uint32_t cyan = pixel.Color(0, 255, 255);
 uint32_t purple = pixel.Color(250, 0, 255);
 uint32_t white = pixel.Color(255, 255, 255);
-uint32_t color_array[] = {red, green, blue, yellow, purple, cyan, white};
+uint32_t no_color = pixel.Color(0, 0, 0);
+uint32_t color_array[] = {red, green, blue, yellow, purple, cyan, white, no_color};
 bool current_status = false;
 
 //Start Button
@@ -181,7 +182,7 @@ int change_answer(int currentColor, int button) {
       if (button == 0)
       {
         return 7;
-      }  //red button detected, return red
+      }  //red button detected, return no color
       else if (button == 1)
       {
         return 3; //green button detected, return yellow
@@ -195,7 +196,7 @@ int change_answer(int currentColor, int button) {
         return 3; //return yellow
       }
       else if (button == 1) {
-        return 7; //return green
+        return 7; //return no color
       }
       else {
         return 5; //return cyan
@@ -209,7 +210,7 @@ int change_answer(int currentColor, int button) {
         return 5; //return cyan
       }
       else {
-        return 7; //return blue
+        return 7; //return no color
       }
 
     case 3: // led is yellow
@@ -242,7 +243,7 @@ int change_answer(int currentColor, int button) {
         return 2; //return blue
       }
       else {
-        return 0; //return green
+        return 1; //return green
       }
 
     case 6: // led is white
@@ -272,15 +273,8 @@ int change_answer(int currentColor, int button) {
 void blink_or_show() {
   for (int index = 0; index < 12; index++)
   {
-    if (user_answer[pos] != -1)
-    {
-      pixel.setPixelColor(index, color_array[user_answer[index]]);
-      pixel.show();
-    }
-    else
-    {
-      pixel.setPixelColor(pos, pixel.Color(0, 0, 0));
-    }
+    pixel.setPixelColor(index, color_array[user_answer[index]]);
+    pixel.show();
   }
   if (startblinkMillis - blinkMillis >= 500)
   {
@@ -289,15 +283,7 @@ void blink_or_show() {
     {
       current_status = true;
       blinkMillis = startblinkMillis;
-      if (user_answer[pos] != -1)
-      {
-        pixel.setPixelColor(pos, color_array[user_answer[pos]]);
-
-      }
-      else
-      {
-        pixel.setPixelColor(pos, pixel.Color(0, 0, 0));
-      }
+      pixel.setPixelColor(pos, color_array[user_answer[pos]]);
       pixel.show();
     }
     else
