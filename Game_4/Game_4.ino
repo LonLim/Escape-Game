@@ -180,7 +180,7 @@ int change_answer(int currentColor, int button) {
     case 0: // led was red
       if (button == 0)
       {
-        return 0;
+        return 7;
       }  //red button detected, return red
       else if (button == 1)
       {
@@ -195,7 +195,7 @@ int change_answer(int currentColor, int button) {
         return 3; //return yellow
       }
       else if (button == 1) {
-        return 1; //return green
+        return 7; //return green
       }
       else {
         return 5; //return cyan
@@ -209,7 +209,7 @@ int change_answer(int currentColor, int button) {
         return 5; //return cyan
       }
       else {
-        return 2; //return blue
+        return 7; //return blue
       }
 
     case 3: // led is yellow
