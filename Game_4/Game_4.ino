@@ -4,29 +4,33 @@
 #define PIXEL_PIN 3
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_PIXELS, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
-//Stepper Motor
+//Stepper Motor 1
 #include <AccelStepper.h>
-#define motorPin1  4      // IN1 on the ULN2003 driver
-#define motorPin2  5      // IN2 on the ULN2003 driver
-#define motorPin3  6     // IN3 on the ULN2003 driver
-#define motorPin4  7     // IN4 on the ULN2003 driver
-#define MotorInterfaceType 8
-AccelStepper stepper = AccelStepper(MotorInterfaceType, motorPin1, motorPin3, motorPin2, motorPin4);
-int stepper_position = 0;
+#define motor1Pin1  4      // IN1 on the ULN2003 driver
+#define motor1Pin2  5      // IN2 on the ULN2003 driver
+#define motor1Pin3  6     // IN3 on the ULN2003 driver
+#define motor1Pin4  7     // IN4 on the ULN2003 driver
+#define Motor1InterfaceType 8
+AccelStepper stepper1 = AccelStepper(Motor1InterfaceType, motor1Pin1, motor1Pin3, motor1Pin2, motor1Pin4);
+int stepper1_position = 0;
 
-//Laser and Light Dependent Resistor
-#define laser 8
-#define laser_sensor 9
-int sensor = 0;
+//Stepper Motor 2
+#define motor2Pin1  9      // IN1 on the ULN2003 driver
+#define motor2Pin2  10      // IN2 on the ULN2003 driver
+#define motor2Pin3  11   // IN3 on the ULN2003 driver
+#define motor2Pin4  12     // IN4 on the ULN2003 driver
+#define Motor2InterfaceType 13
+AccelStepper stepper2 = AccelStepper(Motor2InterfaceType, motor2Pin1, motor2Pin3, motor2Pin2, motor2Pin4);
+int stepper2_position = 6000;
 
 //Analog Joystick
 #define x_direction A0
 int x_value = 0;
 
 //Red, Blue, Green Button
-#define red_button 10
-#define blue_button 11
-#define green_button 12
+#define red_button 13
+#define blue_button 14
+#define green_button 15
 int red_value = 1;
 int blue_value = 1;
 int green_value = 1;
@@ -43,7 +47,7 @@ uint32_t color_array[] = {red, green, blue, yellow, purple, cyan, white};
 bool current_status = false;
 
 //Start Button
-#define start_button 13
+#define start_button 16
 bool start_game = false;
 
 //Answer and inputs
@@ -67,25 +71,24 @@ void setup() {
   pinMode(red_button, INPUT_PULLUP);
   pinMode(green_button, INPUT_PULLUP);
   pinMode(blue_button, INPUT_PULLUP);
-  pinMode(laser, OUTPUT);
-  pinMode(laser_sensor, INPUT);
   Serial.begin(9600);
-  stepper.setMaxSpeed(1000); // Set the maximum steps per second
-  stepper.setAcceleration(200); // Set the maximum acceleration in steps per second^2
+  stepper1.setMaxSpeed(1000); // Set the maximum steps per second
+  stepper1.setAcceleration(200); // Set the maximum acceleration in steps per second^2
+  stepper2.setMaxSpeed(1000); // Set the maximum steps per second
+  stepper2.setAcceleration(200); // Set the maximum acceleration in steps per second^2
   pixel.begin();
   startblinkMillis = millis();
   num_answer = game_set[current_set];
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  //wait for start button pressed
   if (digitalRead(start_button == '0'))
   {
     start_game = true;
   }
   while (start_game == true)
   {
-    digitalWrite(laser, HIGH);
     get_color();
     show_color();
     startPressMillis = millis();
@@ -103,10 +106,12 @@ void get_color() {
   {
     if (index < num_answer)
     {
+      //get random number
       show_answer[index] = random(0, 6);
     }
     else
     {
+      //close rest of pixel
       show_answer[index] = -1;
     }
   }
@@ -117,6 +122,7 @@ void show_color() {
   {
     if (show_answer[index] != -1)
     {
+      //display all color
       pixel.setPixelColor(index, color_array[show_answer[index]]);
       pixel.show();
       delay(500);
@@ -130,6 +136,7 @@ void show_color() {
 }
 
 void user_input() {
+  //check joystick movement
   x_value = analogRead(x_direction);
   if ( x_value > 600)
   {
@@ -147,6 +154,7 @@ void user_input() {
       pos = num_answer;
     }
   }
+  //read all 3 color buttons
   red_value = digitalRead(red_button);
   blue_value = digitalRead(blue_button);
   green_value = digitalRead(green_button);
@@ -167,10 +175,8 @@ void user_input() {
   }
 }
 
-int change_answer(int currentColor, int button) { //Li Long to input swtich case
-
+int change_answer(int currentColor, int button) {
   switch (currentColor) {
-
     case 0: // led was red
       if (button == 0)
       {
@@ -266,24 +272,41 @@ int change_answer(int currentColor, int button) { //Li Long to input swtich case
 void blink_or_show() {
   for (int index = 0; index < 12; index++)
   {
-    pixel.setPixelColor(index, color_array[user_answer[index]]);
-    pixel.show();
+    if (user_answer[pos] != -1)
+    {
+      pixel.setPixelColor(index, color_array[user_answer[index]]);
+      pixel.show();
+    }
+    else
+    {
+      pixel.setPixelColor(pos, pixel.Color(0, 0, 0));
+    }
   }
   if (startblinkMillis - blinkMillis >= 500)
   {
+    //check current status of blink
     if (current_status == false)
     {
-      pixel.setPixelColor(pos, color_array[user_answer[pos]]);
       current_status = true;
       blinkMillis = startblinkMillis;
+      if (user_answer[pos] != -1)
+      {
+        pixel.setPixelColor(pos, color_array[user_answer[pos]]);
+
+      }
+      else
+      {
+        pixel.setPixelColor(pos, pixel.Color(0, 0, 0));
+      }
+      pixel.show();
     }
     else
     {
       pixel.setPixelColor(pos, pixel.Color(0, 0, 0));
       current_status = false;
       blinkMillis = startblinkMillis;
+      pixel.show();
     }
-
   }
 }
 
@@ -291,6 +314,7 @@ void check_answer() {
   int correct = 0;
   for (int index = 0; index < 12; index++)
   {
+    //check answer
     if (user_answer[index] != show_answer[index])
     {
       wrong_answer();
@@ -302,13 +326,19 @@ void check_answer() {
 }
 
 void wrong_answer() {
+  //Reset all arrays
   memset(show_answer, -1, 12);
   memset(user_answer, -1, 12);
   current_set = 0;
+  //Reset start game to wait for start button press
   start_game = false;
   num_answer = game_set[current_set];
-  stepper.moveTo(0);
-  stepper.runToPosition();
+  //Reset both stepper to original position
+  stepper1.moveTo(0);
+  stepper1.runToPosition();
+  stepper2.moveTo(6000);
+  stepper2.runToPosition();
+  //Blink Red
   pixel.fill(pixel.Color(255, 0, 0), 0, 12);
   pixel.show();
   delay(500);
@@ -322,32 +352,32 @@ void wrong_answer() {
 }
 
 void correct_answer() {
+  //increase set and reset all array
   current_set = current_set + 1;
   memset(show_answer, -1, 12);
   memset(user_answer, -1, 12);
-  stepper_position = stepper_position + 1500; //Derrick to decide the total amount to reach from bot to top then divide by 5 to replace 1500
-  stepper.moveTo(stepper_position);
-  stepper.runToPosition();
-  if (current_set < 5)
+  //Stepper 1 motor in clockwise movement
+  stepper1_position = stepper1_position + 1500;
+  stepper1.moveTo(stepper1_position);
+  stepper1.runToPosition();
+  //Steppper 2 motor in anti-clockwise movement
+  stepper2_position = stepper2_position - 1500;
+  stepper2.moveTo(stepper2_position);
+  stepper2.runToPosition();
+  //Check if finish 4 set
+  if (current_set < 4)
   {
     num_answer = game_set[current_set];
   }
-  while (current_set == 5)
+  //Force freeze
+  while (current_set == 4)
   {
-    sensor = digitalRead(laser_sensor);
-    //turn servo
-    if (sensor == HIGH)
-    {
-      pixel.fill(pixel.Color(0, 255, 0), 0, 12);
-      pixel.show();
-      delay(500);
-      pixel.clear();
-      pixel.show();
-      delay(500);
-    }
+    //Turn Green light and blink
+    pixel.fill(pixel.Color(0, 255, 0), 0, 12);
+    pixel.show();
+    delay(500);
+    pixel.clear();
+    pixel.show();
+    delay(500);
   }
-}
-
-void time_and_set() {
-  //Li Long to add in to display time and current set
 }
