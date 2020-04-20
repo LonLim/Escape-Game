@@ -24,25 +24,25 @@ int counter;
 bool correct = false;
 
 int val1 = 0;
-//int val2 = 0;
-//int val3 = 0;
-//int val4 = 0;
-//int val5 = 0;
-//int val6 = 0;
+int val2 = 0;
+int val3 = 0;
+int val4 = 0;
+int val5 = 0;
+int val6 = 0;
 
 int oldVal1 = 0;
-//int oldVal2 = 0;
-//int oldVal3 = 0;
-//int oldVal4 = 0;
-//int oldVal5 = 0;
-//int oldVal6 = 0;
+int oldVal2 = 0;
+int oldVal3 = 0;
+int oldVal4 = 0;
+int oldVal5 = 0;
+int oldVal6 = 0;
 
 int column1_index = 6;
-//int column2_index = 6;
-//int column3_index = 6;
-//int column4_index = 6;
-//int column5_index = 6;
-//int column6_index = 6;
+int column2_index = 6;
+int column3_index = 6;
+int column4_index = 6;
+int column5_index = 6;
+int column6_index = 6;
 
 int position = -1;
 
@@ -54,11 +54,11 @@ unsigned long delayStart = 0;
 void setup () {
   delayStart = millis();   // start delay
   pinMode(column1laser, INPUT);
-//  pinMode(column2laser, INPUT);
-//  pinMode(column3laser, INPUT);
-//  pinMode(column4laser, INPUT);
-//  pinMode(column5laser, INPUT);
-//  pinMode(column6laser, INPUT);
+  pinMode(column2laser, INPUT);
+  pinMode(column3laser, INPUT);
+  pinMode(column4laser, INPUT);
+  pinMode(column5laser, INPUT);
+  pinMode(column6laser, INPUT);
   Serial.begin(9600);
   sample.begin();
   sample.clear();
@@ -67,20 +67,20 @@ void setup () {
 void loop() {
   //Check value of all LDRs
   oldVal1 = analogRead(column1laser);
-//  oldVal2 = analogRead(column2laser);
-//  oldVal3 = analogRead(column3laser);
-//  oldVal4 = analogRead(column4laser);
-//  oldVal5 = analogRead(column5laser);
-//  oldVal6 = analogRead(column6laser);
+  oldVal2 = analogRead(column2laser);
+  oldVal3 = analogRead(column3laser);
+  oldVal4 = analogRead(column4laser);
+  oldVal5 = analogRead(column5laser);
+  oldVal6 = analogRead(column6laser);
 
   if (millis() - delayStart >= 1500) { //Check new current after 1.5sec to prevent error detection
 
     val1 = analogRead(column1laser);
-//    val2 = analogRead(column2laser);
-//    val3 = analogRead(column3laser);
-//    val4 = analogRead(column4laser);
-//    val5 = analogRead(column5laser);
-//    val6 = analogRead(column6laser);
+    val2 = analogRead(column2laser);
+    val3 = analogRead(column3laser);
+    val4 = analogRead(column4laser);
+    val5 = analogRead(column5laser);
+    val6 = analogRead(column6laser);
     delayStart = millis();
   }
   
@@ -88,47 +88,47 @@ void loop() {
   if (abs(val1 - oldVal1) < 5) {
     column1_index = sensor_values(val1);
   }
-//  else if (abs(val2 - oldVal2) < 5) {
-//    column2_index = sensor_values(val2);
-//  }
-//  else if (abs(val3 - oldVal3) < 5) {
-//    column3_index = sensor_values(val3);
-//  }
-//  else if (abs(val4 - oldVal4) < 5) {
-//    column4_index = sensor_values(val4);
-//  }
-//  else if (abs(val5 - oldVal5) < 5) {
-//    column5_index = sensor_values(val5);
-//  }
-//  else if (abs(val6 - oldVal6) < 5) {
-//    column6_index = sensor_values(val6);
-//  }
+  else if (abs(val2 - oldVal2) < 5) {
+    column2_index = sensor_values(val2);
+  }
+  else if (abs(val3 - oldVal3) < 5) {
+    column3_index = sensor_values(val3);
+  }
+  else if (abs(val4 - oldVal4) < 5) {
+    column4_index = sensor_values(val4);
+  }
+  else if (abs(val5 - oldVal5) < 5) {
+    column5_index = sensor_values(val5);
+  }
+  else if (abs(val6 - oldVal6) < 5) {
+    column6_index = sensor_values(val6);
+  }
 
   //light up the corresponding pixel of the LDR
   if (column1_index != 6) {
     position = column1_index;
     light_up_maze();
   }
-//  if (column2_index != 6) {
-//    position = 6 + column2_index;
-//    light_up_maze();
-//  }
-//  if (column3_index != 6) {
-//    position = 12 + column3_index;
-//    light_up_maze();
-//  }
-//  if (column4_index != 6) {
-//    position = 18 + column4_index;
-//    light_up_maze();
-//  }
-//  if (column5_index != 6) {
-//    position = 24 + column5_index;
-//    light_up_maze();
-//  }
-//  if (column6_index != 6) {
-//    position = 30 + column6_index;
-//    light_up_maze();
-//  }
+  if (column2_index != 6) {
+    position = 6 + column2_index;
+    light_up_maze();
+  }
+  if (column3_index != 6) {
+    position = 12 + column3_index;
+    light_up_maze();
+  }
+  if (column4_index != 6) {
+    position = 18 + column4_index;
+    light_up_maze();
+  }
+  if (column5_index != 6) {
+    position = 24 + column5_index;
+    light_up_maze();
+  }
+  if (column6_index != 6) {
+    position = 30 + column6_index;
+    light_up_maze();
+  }
 
   //For Debugging
   for (int i = 0; i < 4; i++) {
