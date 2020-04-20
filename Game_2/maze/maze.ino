@@ -77,46 +77,6 @@ void loop() {
   }
 }
 
-//Check button in the series has been pressed
-int check_button_push(int input) {
-  if (input > 1000)
-  {
-    return 0;
-  }
-  else if ((500 < input) && (input < 600))
-  {
-    return 1;
-  }
-  else if ((300 < input) && (input < 400))
-  {
-    return 2;
-  }
-  else if ((230 < input) && (input < 260))
-  {
-    return 3;
-  }
-  else if ((190 < input) && (input < 210))
-  {
-    return 4;
-  }
-  else if ((155 < input) && (input < 180))
-  {
-    return 5;
-  }
-  else if ((135 < input) && (input < 150))
-  {
-    return 6;
-  }
-  else if ((110 < input) && (input < 130))
-  {
-    return 7;
-  }
-  else
-  {
-    return 8;
-  }
-}
-
 //Light up respective pixel and check if answer is correct
 int light_up_maze() {
   if (position == maze_array[maze_answer_row][current_pos])
