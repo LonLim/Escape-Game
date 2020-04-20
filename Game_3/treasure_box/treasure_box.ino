@@ -2,10 +2,11 @@
 #include <Keypad.h>
 #include <Servo.h>
 
+//LED pins
 #define GreenLED 13
 #define RedLED 12
 
-
+//Variables
 unsigned long time;
 Servo myservo;
 char password[] = { '9', '4', '5', '8'};
@@ -33,12 +34,11 @@ void setup() {
   pinMode(GreenLED, OUTPUT);
   pinMode(RedLED, OUTPUT);
   myservo.attach(10);
-
 }
 
 void loop() {
   //Get keypad pressed
-  char customKey = customKeypad.getKey();
+  char customKey = customKeypad.getKey();//get character from kepad
   if (customKey) { //check whether the user entered a key in the keypad
     password_keyed[index] = customKey;
     if (index < 4) {
@@ -55,7 +55,7 @@ void loop() {
     }
   }
 
-  if (millis() - time > 3000) {
+  if (millis() - time > 3000) {//For turning off Red LED
     digitalWrite(RedLED, LOW);
   }
 
